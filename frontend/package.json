@@ -1,0 +1,52 @@
+{
+  "name": "pdv-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "desktop:preflight": "node ./scripts/check-tauri-linux-deps.mjs",
+    "desktop:prepare-backend": "node ./scripts/prepare-tauri-backend.mjs",
+    "desktop:prepare-python": "node ./scripts/prepare-tauri-python.mjs",
+    "desktop:dev": "pnpm desktop:preflight && pnpm desktop:prepare-backend && pnpm desktop:prepare-python && tauri dev",
+    "desktop:build": "pnpm desktop:preflight && node ./scripts/run-tauri-build.mjs",
+    "desktop:build:linux": "pnpm desktop:preflight && node ./scripts/run-tauri-build.mjs --bundles appimage,deb",
+    "desktop:build:windows": "pnpm desktop:preflight && node ./scripts/run-tauri-build.mjs --bundles msi,nsis",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.0",
+    "@primeuix/themes": "^2.0.3",
+    "chart.js": "^4.5.1",
+    "pinia": "^3.0.2",
+    "primevue": "^4.5.5",
+    "tailwindcss-primeui": "^0.6.1",
+    "vue": "^3.5.13",
+    "vue-advanced-cropper": "^2.8.9",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@tailwindcss/vite": "^4.1.7",
+    "@tauri-apps/cli": "^2.11.2",
+    "@types/node": "^22.15.21",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-vue": "^10.0.1",
+    "globals": "^16.1.0",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4.1.7",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vite": "^6.3.5",
+    "vite-plugin-pwa": "^1.0.0",
+    "vite-plugin-vue-devtools": "^8.1.2",
+    "vue-tsc": "^2.2.10"
+  },
+  "packageManager": "pnpm@10.11.0"
+}

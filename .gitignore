@@ -1,0 +1,17 @@
+.DS_Store
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
+*.pyc
+*.sqlite3
+*.db
+
+backend/.env
+backend/.venv/
+
+frontend/.env
+frontend/dist/
+frontend/node_modules/
+.release/
+frontend/dev-dist/

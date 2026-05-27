@@ -1,0 +1,17 @@
+{
+  "name": "PDV Local",
+  "short_name": "PDV",
+  "description": "Base local-first para operacao de caixa e controle do negocio.",
+  "theme_color": "#9a3412",
+  "background_color": "#fff7ed",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
