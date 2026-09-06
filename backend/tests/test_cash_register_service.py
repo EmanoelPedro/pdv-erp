@@ -3,8 +3,8 @@ from decimal import Decimal
 import pytest
 from sqlalchemy.orm import Session
 
-from app.domain.catalog import Category, Product
 from app.domain.cash_register import CashRegisterStatus
+from app.domain.catalog import Category, Product
 from app.domain.exceptions import (
     CashRegisterAlreadyClosedError,
     CashRegisterAlreadyOpenError,
@@ -93,8 +93,7 @@ def employee_user(db_session: Session) -> User:
 def _create_product(db_session: Session, name: str = "Product", price: str = "100.00") -> Product:
     category_repository = CategoryRepository(db_session)
     product_repository = ProductRepository(db_session)
-    category = category_repository.create(
-        Category.create(name="Categoria Teste"))
+    category = category_repository.create(Category.create(name="Categoria Teste"))
     product = product_repository.create(
         Product.create(
             category_id=category.id,

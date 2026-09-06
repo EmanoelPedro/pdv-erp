@@ -11,7 +11,10 @@
     >
       <template #default>
         <div class="flex w-full items-center gap-2 text-left">
-          <div class="flex h-8 w-8 items-center justify-center rounded-lg text-xl" :class="item.visual.surfaceClass">
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-lg text-xl"
+            :class="item.visual.surfaceClass"
+          >
             <span class="leading-none">{{ item.visual.icon }}</span>
           </div>
           <div class="flex flex-col">
@@ -28,7 +31,10 @@
 import { computed } from 'vue'
 import Button from 'primevue/button'
 
-import { resolveCategoryVisual, sortCategoriesForPos } from '@/components/pos/visuals'
+import {
+  resolveCategoryVisual,
+  sortCategoriesForPos
+} from '@/components/pos/visuals'
 import type { Category } from '@/types/catalog'
 
 const props = defineProps<{

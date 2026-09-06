@@ -31,8 +31,7 @@ def create_sale(
         debit_card_amount=payload.debit_card_amount,
         credit_card_amount=payload.credit_card_amount,
     )
-    snapshot = cash_register_service.get_session_snapshot(
-        result.cash_register_session.id)
+    snapshot = cash_register_service.get_session_snapshot(result.cash_register_session.id)
     return CreateSaleResponse(
         sale=SaleResponse.from_domain(result.sale),
         cash_register_session=CashRegisterSessionResponse.from_domain(

@@ -48,15 +48,22 @@ function buildHistoryQuery(filters?: CashRegisterHistoryFilters): string {
 export async function listCashRegisterHistory(
   filters?: CashRegisterHistoryFilters
 ): Promise<CashRegisterSession[]> {
-  return apiGet<CashRegisterSession[]>(`/api/v1/cash-register/history${buildHistoryQuery(filters)}`)
+  return apiGet<CashRegisterSession[]>(
+    `/api/v1/cash-register/history${buildHistoryQuery(filters)}`
+  )
 }
 
-export async function getCashRegisterSession(sessionId: string): Promise<CashRegisterSession> {
+export async function getCashRegisterSession(
+  sessionId: string
+): Promise<CashRegisterSession> {
   return apiGet<CashRegisterSession>(`/api/v1/cash-register/${sessionId}`)
 }
 
 export function saveLastClosedSession(session: CashRegisterSession): void {
-  window.sessionStorage.setItem(LAST_CLOSED_SESSION_KEY, JSON.stringify(session))
+  window.sessionStorage.setItem(
+    LAST_CLOSED_SESSION_KEY,
+    JSON.stringify(session)
+  )
 }
 
 export function getLastClosedSession(): CashRegisterSession | null {

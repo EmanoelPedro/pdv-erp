@@ -1,5 +1,21 @@
-# PDV Backend
+# Backend do PDV Local
 
-Base do backend local-first em FastAPI para o sistema de PDV.
+API local do PDV Local, construída com FastAPI, SQLAlchemy e SQLite.
 
-Use `uv run --python "$(command -v python3)" ...` para garantir um interpretador com suporte a SQLite.
+## Desenvolvimento
+
+```bash
+uv sync --locked --all-groups
+uv run alembic upgrade head
+uv run uvicorn app.main:app --reload
+```
+
+## Verificações
+
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
+```
+
+As configurações disponíveis estão documentadas em [.env.example](.env.example). Dados locais, mídia e arquivos de ambiente não são versionados.

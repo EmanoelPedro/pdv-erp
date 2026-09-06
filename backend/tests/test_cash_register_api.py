@@ -29,8 +29,7 @@ def test_current_cash_register_endpoint(
         headers=owner_auth_headers,
     )
 
-    response = client.get("/api/v1/cash-register/current",
-                          headers=owner_auth_headers)
+    response = client.get("/api/v1/cash-register/current", headers=owner_auth_headers)
 
     assert response.status_code == 200
     assert response.json()["status"] == "OPEN"
@@ -99,8 +98,7 @@ def test_close_endpoint_requires_owner_role(
     )
 
     assert response.status_code == 403
-    assert response.json()[
-        "detail"] == "Owner approval is required for this action."
+    assert response.json()["detail"] == "Owner approval is required for this action."
 
 
 def test_cash_register_requires_authentication(client: TestClient) -> None:

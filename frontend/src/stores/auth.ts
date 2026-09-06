@@ -1,7 +1,17 @@
 import { defineStore } from 'pinia'
 
-import { getCurrentUser, getSetupState, login, logout, registerUser } from '@/services/auth'
-import { clearStoredAuthToken, getStoredAuthToken, setStoredAuthToken } from '@/services/authSession'
+import {
+  getCurrentUser,
+  getSetupState,
+  login,
+  logout,
+  registerUser
+} from '@/services/auth'
+import {
+  clearStoredAuthToken,
+  getStoredAuthToken,
+  setStoredAuthToken
+} from '@/services/authSession'
 import { ApiError } from '@/services/http'
 import type { AuthUser, LoginPayload, RegisterUserPayload } from '@/types/auth'
 
@@ -45,7 +55,7 @@ export const useAuthStore = defineStore('auth', {
         this.initializationError =
           error instanceof Error
             ? error.message
-            : 'Nao foi possivel conectar com a API local.'
+            : 'Não foi possível conectar com a API local.'
       } finally {
         this.status = 'ready'
       }

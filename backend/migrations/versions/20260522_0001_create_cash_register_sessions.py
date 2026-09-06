@@ -19,8 +19,7 @@ depends_on: Sequence[str] | None = None
 def upgrade() -> None:
     op.create_table(
         "cash_register_sessions",
-        sa.Column("id", sa.String(length=36),
-                  primary_key=True, nullable=False),
+        sa.Column("id", sa.String(length=36), primary_key=True, nullable=False),
         sa.Column("status", sa.String(length=20), nullable=False),
         sa.Column("opening_amount", sa.Numeric(12, 2), nullable=False),
         sa.Column("expected_amount", sa.Numeric(12, 2), nullable=False),
@@ -41,6 +40,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index("uq_cash_register_single_open",
-                  table_name="cash_register_sessions")
+    op.drop_index("uq_cash_register_single_open", table_name="cash_register_sessions")
     op.drop_table("cash_register_sessions")

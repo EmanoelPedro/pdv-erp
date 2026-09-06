@@ -5,8 +5,11 @@ export interface RuntimeConfig {
   apiBaseUrl: string
 }
 
-const webDefaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:8000' : '')
-const desktopDefaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8000'
+const webDefaultBaseUrl =
+  import.meta.env.VITE_API_BASE_URL ??
+  (import.meta.env.DEV ? 'http://127.0.0.1:8000' : '')
+const desktopDefaultBaseUrl =
+  import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8000'
 
 let runtimeConfig: RuntimeConfig | null = null
 
@@ -26,7 +29,8 @@ export async function initializeRuntimeConfig(): Promise<RuntimeConfig> {
 
   runtimeConfig = {
     mode,
-    apiBaseUrl: mode === 'desktop' ? await resolveDesktopApiBaseUrl() : webDefaultBaseUrl
+    apiBaseUrl:
+      mode === 'desktop' ? await resolveDesktopApiBaseUrl() : webDefaultBaseUrl
   }
 
   return runtimeConfig

@@ -1,5 +1,11 @@
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, readdirSync, renameSync, rmSync } from 'node:fs'
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  renameSync,
+  rmSync
+} from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -7,15 +13,28 @@ const scriptDir = dirname(fileURLToPath(import.meta.url))
 const frontendDir = resolve(scriptDir, '..')
 const tauriDir = resolve(frontendDir, 'src-tauri')
 const tauriConfigPath = resolve(tauriDir, 'tauri.conf.json')
-const bundleAppImageDir = resolve(tauriDir, 'target', 'release', 'bundle', 'appimage')
-const linuxdeployPath = resolve(process.env.HOME ?? '', '.cache', 'tauri', 'linuxdeploy-x86_64.AppImage')
+const bundleAppImageDir = resolve(
+  tauriDir,
+  'target',
+  'release',
+  'bundle',
+  'appimage'
+)
+const linuxdeployPath = resolve(
+  process.env.HOME ?? '',
+  '.cache',
+  'tauri',
+  'linuxdeploy-x86_64.AppImage'
+)
 
 function withLinuxAppImageEnv() {
   const env = { ...process.env }
 
   if (process.platform === 'linux' && !env.APPIMAGE_EXTRACT_AND_RUN) {
     env.APPIMAGE_EXTRACT_AND_RUN = '1'
-    console.log('Linux desktop build will run AppImage tooling with APPIMAGE_EXTRACT_AND_RUN=1.')
+    console.log(
+      'Linux desktop build will run AppImage tooling with APPIMAGE_EXTRACT_AND_RUN=1.'
+    )
   }
 
   return env
@@ -43,13 +62,21 @@ function parseBundles(rawArgs) {
     const current = rawArgs[index]
 
     if (current === '--bundles') {
-      bundles = rawArgs[index + 1]?.split(',').map((item) => item.trim()).filter(Boolean) ?? []
+      bundles =
+        rawArgs[index + 1]
+          ?.split(',')
+          .map((item) => item.trim())
+          .filter(Boolean) ?? []
       index += 1
       continue
     }
 
     if (current.startsWith('--bundles=')) {
-      bundles = current.slice('--bundles='.length).split(',').map((item) => item.trim()).filter(Boolean)
+      bundles = current
+        .slice('--bundles='.length)
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
       continue
     }
 
@@ -68,10 +95,14 @@ function readTauriConfig() {
 
 function findAppDir() {
   if (!existsSync(bundleAppImageDir)) {
-    throw new Error(`AppImage bundle directory not found at ${bundleAppImageDir}`)
+    throw new Error(
+      `AppImage bundle directory not found at ${bundleAppImageDir}`
+    )
   }
 
-  const entry = readdirSync(bundleAppImageDir, { withFileTypes: true }).find((item) => item.isDirectory() && item.name.endsWith('.AppDir'))
+  const entry = readdirSync(bundleAppImageDir, { withFileTypes: true }).find(
+    (item) => item.isDirectory() && item.name.endsWith('.AppDir')
+  )
 
   if (!entry) {
     throw new Error(`No AppDir was generated under ${bundleAppImageDir}`)
@@ -117,7 +148,9 @@ function finalizeManualAppImage() {
     .find((candidate) => candidate !== outputPath)
 
   if (!source) {
-    throw new Error('linuxdeploy completed without producing an AppImage artifact.')
+    throw new Error(
+      'linuxdeploy completed without producing an AppImage artifact.'
+    )
   }
 
   if (source !== outputPath) {
@@ -135,10 +168,15 @@ function runManualLinuxDeploy(env) {
 
   removeExistingAppImages()
   const appDir = findAppDir()
-  const status = run(linuxdeployPath, ['--appdir', appDir, '--output', 'appimage'], {
-    ...env,
-    ARCH: 'x86_64'
-  }, bundleAppImageDir)
+  const status = run(
+    linuxdeployPath,
+    ['--appdir', appDir, '--output', 'appimage'],
+    {
+      ...env,
+      ARCH: 'x86_64'
+    },
+    bundleAppImageDir
+  )
 
   if (status !== 0) {
     process.exit(status)
@@ -160,7 +198,18 @@ const includesAppImage = effectiveBundles.includes('appimage')
 const otherBundles = effectiveBundles.filter((bundle) => bundle !== 'appimage')
 
 if (otherBundles.length > 0) {
-  const otherStatus = run('pnpm', ['exec', 'tauri', 'build', ...forwardedArgs, '--bundles', otherBundles.join(',')], env)
+  const otherStatus = run(
+    'pnpm',
+    [
+      'exec',
+      'tauri',
+      'build',
+      ...forwardedArgs,
+      '--bundles',
+      otherBundles.join(',')
+    ],
+    env
+  )
   if (otherStatus !== 0) {
     process.exit(otherStatus)
   }
@@ -170,11 +219,17 @@ if (!includesAppImage) {
   process.exit(0)
 }
 
-const appImageStatus = run('pnpm', ['exec', 'tauri', 'build', ...forwardedArgs, '--bundles', 'appimage'], env)
+const appImageStatus = run(
+  'pnpm',
+  ['exec', 'tauri', 'build', ...forwardedArgs, '--bundles', 'appimage'],
+  env
+)
 
 if (appImageStatus === 0) {
   process.exit(0)
 }
 
-console.warn('Tauri AppImage step failed; retrying linuxdeploy manually against the generated AppDir.')
+console.warn(
+  'Tauri AppImage step failed; retrying linuxdeploy manually against the generated AppDir.'
+)
 runManualLinuxDeploy(env)

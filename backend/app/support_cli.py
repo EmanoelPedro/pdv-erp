@@ -3,13 +3,11 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from sqlalchemy import create_engine, delete, func, select
-from sqlalchemy.orm import Session
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.config import get_settings
 from app.database.models import UserModel, UserSessionModel
 from app.services.security import hash_pin
-
 
 DEFAULT_DESKTOP_DATA_DIR = Path.home() / ".local" / "share" / "com.pdv.local"
 
@@ -206,7 +204,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--data-dir",
-        help="Override the application data directory. Defaults to the desktop app data path when available.",
+        help=(
+            "Override the application data directory. "
+            "Defaults to the desktop app data path when available."
+        ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -215,23 +216,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     list_users_parser.set_defaults(handler=list_users)
 
-    set_username_parser = subparsers.add_parser(
-        "set-username", help="Rename a local username."
-    )
+    set_username_parser = subparsers.add_parser("set-username", help="Rename a local username.")
     set_username_parser.add_argument("--current-username", required=True)
     set_username_parser.add_argument("--new-username", required=True)
     set_username_parser.set_defaults(handler=set_username)
 
-    set_pin_parser = subparsers.add_parser(
-        "set-pin", help="Reset the PIN for a local user."
-    )
+    set_pin_parser = subparsers.add_parser("set-pin", help="Reset the PIN for a local user.")
     set_pin_parser.add_argument("--username", required=True)
     set_pin_parser.add_argument("--pin", required=True)
     set_pin_parser.set_defaults(handler=set_pin)
 
-    activate_user_parser = subparsers.add_parser(
-        "activate-user", help="Activate a local user."
-    )
+    activate_user_parser = subparsers.add_parser("activate-user", help="Activate a local user.")
     activate_user_parser.add_argument("--username", required=True)
     activate_user_parser.set_defaults(handler=activate_user)
 

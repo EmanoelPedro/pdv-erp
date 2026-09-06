@@ -6,28 +6,65 @@
           <div class="flex flex-col gap-4">
             <div class="grid gap-3 sm:grid-cols-3">
               <div class="catalog-preview-tile">
-                <div class="text-xs font-medium uppercase tracking-[0.18em] text-zinc-500">Categorias</div>
-                <div class="mt-2 text-2xl font-semibold text-zinc-950">{{ categories.length }}</div>
+                <div
+                  class="text-xs font-medium uppercase tracking-[0.18em] text-zinc-500"
+                >
+                  Categorias
+                </div>
+                <div class="mt-2 text-2xl font-semibold text-zinc-950">
+                  {{ categories.length }}
+                </div>
               </div>
               <div class="catalog-preview-tile">
-                <div class="text-xs font-medium uppercase tracking-[0.18em] text-zinc-500">Ativos</div>
-                <div class="mt-2 text-2xl font-semibold text-zinc-950">{{ activeProducts.length }}</div>
+                <div
+                  class="text-xs font-medium uppercase tracking-[0.18em] text-zinc-500"
+                >
+                  Ativos
+                </div>
+                <div class="mt-2 text-2xl font-semibold text-zinc-950">
+                  {{ activeProducts.length }}
+                </div>
               </div>
               <div class="catalog-preview-tile">
-                <div class="text-xs font-medium uppercase tracking-[0.18em] text-zinc-500">Inativos</div>
-                <div class="mt-2 text-2xl font-semibold text-zinc-950">{{ inactiveProducts.length }}</div>
+                <div
+                  class="text-xs font-medium uppercase tracking-[0.18em] text-zinc-500"
+                >
+                  Inativos
+                </div>
+                <div class="mt-2 text-2xl font-semibold text-zinc-950">
+                  {{ inactiveProducts.length }}
+                </div>
               </div>
             </div>
 
             <div class="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-              <div class="text-sm font-semibold text-zinc-950">Nova categoria</div>
-              <form class="mt-4 flex flex-col gap-3" @submit.prevent="submitCategory">
+              <div class="text-sm font-semibold text-zinc-950">
+                Nova categoria
+              </div>
+              <form
+                class="mt-4 flex flex-col gap-3"
+                @submit.prevent="submitCategory"
+              >
                 <div class="flex flex-col gap-2">
-                  <label class="text-sm font-medium text-zinc-700" for="category-name">Nome</label>
-                  <InputText id="category-name" v-model="categoryName" placeholder="Ex.: Pasteis" />
+                  <label
+                    class="text-sm font-medium text-zinc-700"
+                    for="category-name"
+                    >Nome</label
+                  >
+                  <InputText
+                    id="category-name"
+                    v-model="categoryName"
+                    placeholder="Ex.: Pasteis"
+                  />
                 </div>
 
-                <Button type="submit" :label="isSubmittingCategory ? 'Salvando...' : 'Criar categoria'" :loading="isSubmittingCategory" />
+                <Button
+                  type="submit"
+                  :label="
+                    isSubmittingCategory ? 'Salvando...' : 'Criar categoria'
+                  "
+                  :loading="isSubmittingCategory"
+                />
               </form>
             </div>
           </div>
@@ -38,11 +75,17 @@
         <template #content>
           <div class="grid gap-5 xl:grid-cols-[1fr_0.9fr]">
             <form class="flex flex-col gap-4" @submit.prevent="submitProduct">
-              <div class="text-lg font-semibold text-zinc-950">Cadastrar produto</div>
+              <div class="text-lg font-semibold text-zinc-950">
+                Cadastrar produto
+              </div>
 
               <div class="grid gap-4 md:grid-cols-2">
                 <div class="flex flex-col gap-2">
-                  <label class="text-sm font-medium text-zinc-700" for="product-category">Categoria</label>
+                  <label
+                    class="text-sm font-medium text-zinc-700"
+                    for="product-category"
+                    >Categoria</label
+                  >
                   <Select
                     id="product-category"
                     v-model="selectedCategoryId"
@@ -54,7 +97,11 @@
                 </div>
 
                 <div class="flex flex-col gap-2">
-                  <label class="text-sm font-medium text-zinc-700" for="product-price">Preco</label>
+                  <label
+                    class="text-sm font-medium text-zinc-700"
+                    for="product-price"
+                    >Preço</label
+                  >
                   <InputNumber
                     id="product-price"
                     v-model="productPriceValue"
@@ -71,13 +118,25 @@
               </div>
 
               <div class="flex flex-col gap-2">
-                <label class="text-sm font-medium text-zinc-700" for="product-name">Nome</label>
-                <InputText id="product-name" v-model="productName" placeholder="Ex.: Pastel de Carne" />
+                <label
+                  class="text-sm font-medium text-zinc-700"
+                  for="product-name"
+                  >Nome</label
+                >
+                <InputText
+                  id="product-name"
+                  v-model="productName"
+                  placeholder="Ex.: Pastel de Carne"
+                />
               </div>
 
               <div class="grid gap-4 md:grid-cols-[0.45fr_0.55fr]">
                 <div class="flex flex-col gap-2">
-                  <label class="text-sm font-medium text-zinc-700" for="product-emoji">Emoji</label>
+                  <label
+                    class="text-sm font-medium text-zinc-700"
+                    for="product-emoji"
+                    >Emoji</label
+                  >
                   <Select
                     id="product-emoji"
                     v-model="productEmoji"
@@ -91,7 +150,11 @@
                 </div>
 
                 <div class="flex flex-col gap-2">
-                  <label class="text-sm font-medium text-zinc-700" for="product-image">Foto</label>
+                  <label
+                    class="text-sm font-medium text-zinc-700"
+                    for="product-image"
+                    >Foto</label
+                  >
                   <input
                     id="product-image"
                     class="rounded-xl border border-zinc-300 bg-white px-3 py-3 text-sm text-zinc-700"
@@ -99,31 +162,60 @@
                     accept="image/png,image/jpeg,image/webp,image/gif"
                     @change="handleImageSelection"
                   />
-                  <div class="text-xs text-zinc-500">Ao escolher a foto, uma janela de corte sera aberta para ajustar qualidade e enquadramento.</div>
+                  <div class="text-xs text-zinc-500">
+                    Ao escolher a foto, uma janela de corte será aberta para
+                    ajustar qualidade e enquadramento.
+                  </div>
                 </div>
               </div>
 
               <div class="flex items-center gap-3">
-                <Button type="submit" :label="isSubmittingProduct ? 'Salvando...' : 'Criar produto'" :loading="isSubmittingProduct" />
-                <Button label="Limpar" severity="secondary" text @click.prevent="resetCreateForm" />
+                <Button
+                  type="submit"
+                  :label="isSubmittingProduct ? 'Salvando...' : 'Criar produto'"
+                  :loading="isSubmittingProduct"
+                />
+                <Button
+                  label="Limpar"
+                  severity="secondary"
+                  text
+                  @click.prevent="resetCreateForm"
+                />
               </div>
             </form>
 
             <div class="catalog-preview-tile flex flex-col gap-4">
-              <div class="text-sm font-semibold text-zinc-950">Preview do produto</div>
+              <div class="text-sm font-semibold text-zinc-950">
+                Preview do produto
+              </div>
 
-              <div class="rounded-[1.5rem] border border-zinc-200 bg-white p-4 shadow-sm">
+              <div
+                class="rounded-[1.5rem] border border-zinc-200 bg-white p-4 shadow-sm"
+              >
                 <div class="flex items-start justify-between gap-3">
                   <div class="catalog-product-thumb">
-                    <img v-if="productImagePreview" :src="productImagePreview" :alt="previewName" class="h-full w-full object-cover" />
-                    <span v-else class="text-5xl leading-none">{{ previewEmoji }}</span>
+                    <img
+                      v-if="productImagePreview"
+                      :src="productImagePreview"
+                      :alt="previewName"
+                      class="h-full w-full object-cover"
+                    />
+                    <span v-else class="text-5xl leading-none">{{
+                      previewEmoji
+                    }}</span>
                   </div>
                   <Tag :value="previewCategory" severity="secondary" />
                 </div>
 
-                <div class="mt-5 text-xl font-semibold text-zinc-950">{{ previewName }}</div>
-                <div class="mt-2 text-sm text-zinc-500">{{ previewCategory }}</div>
-                <div class="mt-6 text-3xl font-semibold text-emerald-700">{{ formatCurrencyNumber(productPriceValue ?? 0) }}</div>
+                <div class="mt-5 text-xl font-semibold text-zinc-950">
+                  {{ previewName }}
+                </div>
+                <div class="mt-2 text-sm text-zinc-500">
+                  {{ previewCategory }}
+                </div>
+                <div class="mt-6 text-3xl font-semibold text-emerald-700">
+                  {{ formatCurrencyNumber(productPriceValue ?? 0) }}
+                </div>
               </div>
             </div>
           </div>
@@ -146,20 +238,38 @@
               />
             </div>
 
-            <Button label="Atualizar" severity="secondary" outlined @click="refreshCatalog" />
+            <Button
+              label="Atualizar"
+              severity="secondary"
+              outlined
+              @click="refreshCatalog"
+            />
           </div>
 
-          <Message v-if="message" severity="success" :closable="false">{{ message }}</Message>
-          <Message v-if="errorMessage" severity="error" :closable="false">{{ errorMessage }}</Message>
+          <Message v-if="message" severity="success" :closable="false">{{
+            message
+          }}</Message>
+          <Message v-if="errorMessage" severity="error" :closable="false">{{
+            errorMessage
+          }}</Message>
 
           <div v-if="visibleProducts.length === 0" class="pos-empty-state">
             <div class="text-5xl">📦</div>
-            <div class="mt-3 text-lg font-semibold text-zinc-700">Nenhum produto encontrado</div>
-            <div class="mt-1 text-sm text-zinc-500">Altere o filtro ou cadastre um novo item.</div>
+            <div class="mt-3 text-lg font-semibold text-zinc-700">
+              Nenhum produto encontrado
+            </div>
+            <div class="mt-1 text-sm text-zinc-500">
+              Altere o filtro ou cadastre um novo item.
+            </div>
           </div>
 
           <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <article v-for="product in visibleProducts" :key="product.id" class="catalog-preview-tile flex flex-col gap-4" :class="{ 'opacity-70': !product.is_active }">
+            <article
+              v-for="product in visibleProducts"
+              :key="product.id"
+              class="catalog-preview-tile flex flex-col gap-4"
+              :class="{ 'opacity-70': !product.is_active }"
+            >
               <div class="flex items-start justify-between gap-3">
                 <div class="catalog-product-thumb">
                   <img
@@ -168,21 +278,37 @@
                     :alt="product.name"
                     class="h-full w-full object-cover"
                   />
-                  <span v-else class="text-4xl leading-none">{{ product.emoji || fallbackEmoji(product) }}</span>
+                  <span v-else class="text-4xl leading-none">{{
+                    product.emoji || fallbackEmoji(product)
+                  }}</span>
                 </div>
-                <Tag :severity="product.is_active ? 'success' : 'secondary'" :value="product.is_active ? 'Ativo' : 'Inativo'" />
+                <Tag
+                  :severity="product.is_active ? 'success' : 'secondary'"
+                  :value="product.is_active ? 'Ativo' : 'Inativo'"
+                />
               </div>
 
               <div>
-                <div class="text-lg font-semibold text-zinc-950">{{ product.name }}</div>
-                <div class="mt-1 text-sm text-zinc-500">{{ categoryNameById(product.category_id) }}</div>
+                <div class="text-lg font-semibold text-zinc-950">
+                  {{ product.name }}
+                </div>
+                <div class="mt-1 text-sm text-zinc-500">
+                  {{ categoryNameById(product.category_id) }}
+                </div>
               </div>
 
               <div class="mt-auto flex flex-col gap-3">
-                <div class="text-2xl font-semibold text-zinc-950">{{ formatCurrency(product.price) }}</div>
+                <div class="text-2xl font-semibold text-zinc-950">
+                  {{ formatCurrency(product.price) }}
+                </div>
 
                 <div class="grid gap-2 sm:grid-cols-2">
-                  <Button label="Editar" severity="secondary" outlined @click="openEditDialog(product)" />
+                  <Button
+                    label="Editar"
+                    severity="secondary"
+                    outlined
+                    @click="openEditDialog(product)"
+                  />
                   <Button
                     v-if="product.is_active"
                     label="Excluir"
@@ -205,16 +331,32 @@
       </template>
     </Card>
 
-    <Dialog v-model:visible="showEditDialog" modal header="Editar produto" :style="{ width: '42rem', maxWidth: '95vw' }">
+    <Dialog
+      v-model:visible="showEditDialog"
+      modal
+      header="Editar produto"
+      :style="{ width: '42rem', maxWidth: '95vw' }"
+    >
       <form class="flex flex-col gap-4" @submit.prevent="submitEditProduct">
         <div class="grid gap-4 md:grid-cols-2">
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-zinc-700" for="edit-category">Categoria</label>
-            <Select id="edit-category" v-model="editCategoryId" :options="categories" option-label="name" option-value="id" placeholder="Selecione" />
+            <label class="text-sm font-medium text-zinc-700" for="edit-category"
+              >Categoria</label
+            >
+            <Select
+              id="edit-category"
+              v-model="editCategoryId"
+              :options="categories"
+              option-label="name"
+              option-value="id"
+              placeholder="Selecione"
+            />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-zinc-700" for="edit-price">Preco</label>
+            <label class="text-sm font-medium text-zinc-700" for="edit-price"
+              >Preço</label
+            >
             <InputNumber
               id="edit-price"
               v-model="editPriceValue"
@@ -230,13 +372,17 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-zinc-700" for="edit-name">Nome</label>
+          <label class="text-sm font-medium text-zinc-700" for="edit-name"
+            >Nome</label
+          >
           <InputText id="edit-name" v-model="editName" />
         </div>
 
         <div class="grid gap-4 md:grid-cols-[0.45fr_0.55fr]">
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-zinc-700" for="edit-emoji">Emoji</label>
+            <label class="text-sm font-medium text-zinc-700" for="edit-emoji"
+              >Emoji</label
+            >
             <Select
               id="edit-emoji"
               v-model="editEmoji"
@@ -250,7 +396,9 @@
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-zinc-700" for="edit-image">Nova foto</label>
+            <label class="text-sm font-medium text-zinc-700" for="edit-image"
+              >Nova foto</label
+            >
             <input
               id="edit-image"
               class="rounded-xl border border-zinc-300 bg-white px-3 py-3 text-sm text-zinc-700"
@@ -263,14 +411,34 @@
 
         <div class="grid gap-3 md:grid-cols-[auto_1fr] md:items-start">
           <div class="catalog-product-thumb">
-            <img v-if="editPreviewUrl" :src="editPreviewUrl" alt="Preview da imagem do produto" class="h-full w-full object-cover" />
-            <span v-else class="text-4xl leading-none">{{ editEmoji || fallbackEmoji({ category_id: editCategoryId, name: editName }) }}</span>
+            <img
+              v-if="editPreviewUrl"
+              :src="editPreviewUrl"
+              alt="Preview da imagem do produto"
+              class="h-full w-full object-cover"
+            />
+            <span v-else class="text-4xl leading-none">{{
+              editEmoji ||
+              fallbackEmoji({ category_id: editCategoryId, name: editName })
+            }}</span>
           </div>
 
           <div class="flex flex-col gap-3">
             <div class="flex flex-wrap gap-2">
-              <Button label="Ajustar foto atual" severity="secondary" outlined :disabled="!editImageCurrentPath" @click.prevent="openCropperForCurrentEditImage" />
-              <Button label="Recortar nova foto" severity="secondary" text :disabled="!editPreviewUrl" @click.prevent="reopenEditCropper" />
+              <Button
+                label="Ajustar foto atual"
+                severity="secondary"
+                outlined
+                :disabled="!editImageCurrentPath"
+                @click.prevent="openCropperForCurrentEditImage"
+              />
+              <Button
+                label="Recortar nova foto"
+                severity="secondary"
+                text
+                :disabled="!editPreviewUrl"
+                @click.prevent="reopenEditCropper"
+              />
             </div>
 
             <label class="flex items-center gap-3 text-sm text-zinc-700">
@@ -282,8 +450,17 @@
       </form>
 
       <template #footer>
-        <Button label="Cancelar" severity="secondary" text @click="showEditDialog = false" />
-        <Button label="Salvar alteracoes" :loading="isSubmittingEdit" @click="submitEditProduct" />
+        <Button
+          label="Cancelar"
+          severity="secondary"
+          text
+          @click="showEditDialog = false"
+        />
+        <Button
+          label="Salvar alteracoes"
+          :loading="isSubmittingEdit"
+          @click="submitEditProduct"
+        />
       </template>
     </Dialog>
 
@@ -388,8 +565,12 @@ const currencyFormatter = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL'
 })
 
-const activeProducts = computed(() => products.value.filter((product) => product.is_active))
-const inactiveProducts = computed(() => products.value.filter((product) => !product.is_active))
+const activeProducts = computed(() =>
+  products.value.filter((product) => product.is_active)
+)
+const inactiveProducts = computed(() =>
+  products.value.filter((product) => !product.is_active)
+)
 const visibleProducts = computed(() => {
   if (catalogFilter.value === 'ACTIVE') {
     return activeProducts.value
@@ -399,8 +580,12 @@ const visibleProducts = computed(() => {
   }
   return products.value
 })
-const previewName = computed(() => productName.value.trim() || 'Produto sem nome')
-const previewCategory = computed(() => categoryNameById(selectedCategoryId.value))
+const previewName = computed(
+  () => productName.value.trim() || 'Produto sem nome'
+)
+const previewCategory = computed(() =>
+  categoryNameById(selectedCategoryId.value)
+)
 const previewEmoji = computed(() => {
   const fallbackProduct = {
     category_id: selectedCategoryId.value,
@@ -410,7 +595,9 @@ const previewEmoji = computed(() => {
   return productEmoji.value?.trim() || fallbackEmoji(fallbackProduct)
 })
 const cropDialogTitle = computed(() =>
-  cropTarget.value === 'edit' ? 'Ajustar foto do produto' : 'Preparar foto do novo produto'
+  cropTarget.value === 'edit'
+    ? 'Ajustar foto do produto'
+    : 'Preparar foto do novo produto'
 )
 const editPreviewUrl = computed(() => {
   if (editRemoveImage.value && !editImageFile.value) {
@@ -441,11 +628,17 @@ function formatDecimalPrice(value: number | null): string {
 }
 
 function categoryNameById(categoryId: string): string {
-  return categories.value.find((category) => category.id === categoryId)?.name ?? 'Sem categoria'
+  return (
+    categories.value.find((category) => category.id === categoryId)?.name ??
+    'Sem categoria'
+  )
 }
 
 function fallbackEmoji(product: Pick<Product, 'category_id' | 'name'>): string {
-  return resolveProductVisual(categoryNameById(product.category_id), product.name).icon
+  return resolveProductVisual(
+    categoryNameById(product.category_id),
+    product.name
+  ).icon
 }
 
 function productImageUrl(imagePath: string): string {
@@ -474,19 +667,22 @@ function readError(error: unknown): string {
   if (error instanceof Error) {
     return error.message
   }
-  return 'Nao foi possivel salvar o catalogo.'
+  return 'Não foi possível salvar o catalogo.'
 }
 
 async function fileToDataUrl(file: File): Promise<string> {
   return await new Promise<string>((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(String(reader.result))
-    reader.onerror = () => reject(new Error('Nao foi possivel ler a imagem.'))
+    reader.onerror = () => reject(new Error('Não foi possível ler a imagem.'))
     reader.readAsDataURL(file)
   })
 }
 
-async function openCropperForFile(file: File, target: Exclude<CropTarget, null>): Promise<void> {
+async function openCropperForFile(
+  file: File,
+  target: Exclude<CropTarget, null>
+): Promise<void> {
   cropImageSource.value = await fileToDataUrl(file)
   cropTarget.value = target
   cropFileName.value = `${file.name.replace(/\.[^.]+$/, '') || 'produto'}.webp`

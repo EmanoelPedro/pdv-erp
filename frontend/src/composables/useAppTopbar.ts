@@ -1,6 +1,12 @@
 import { inject, type InjectionKey } from 'vue'
 
-export type AppTopbarSeverity = 'secondary' | 'contrast' | 'success' | 'info' | 'warn' | 'danger'
+export type AppTopbarSeverity =
+  | 'secondary'
+  | 'contrast'
+  | 'success'
+  | 'info'
+  | 'warn'
+  | 'danger'
 
 export interface AppTopbarBadge {
   value: string
@@ -29,7 +35,8 @@ export interface AppTopbarController {
   clearTopbar: () => void
 }
 
-export const appTopbarKey: InjectionKey<AppTopbarController> = Symbol('appTopbar')
+export const appTopbarKey: InjectionKey<AppTopbarController> =
+  Symbol('appTopbar')
 
 export function useAppTopbar(): AppTopbarController {
   const controller = inject(appTopbarKey, null)

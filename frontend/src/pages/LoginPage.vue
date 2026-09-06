@@ -1,5 +1,7 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-zinc-100 px-4 py-8">
+  <div
+    class="flex min-h-screen items-center justify-center bg-zinc-100 px-4 py-8"
+  >
     <Card class="w-full max-w-md">
       <template #title>PDV Local</template>
       <template #subtitle>
@@ -8,10 +10,18 @@
       <template #content>
         <div class="flex flex-col gap-4">
           <p class="text-sm text-zinc-600">
-            {{ authStore.hasUsers ? 'Informe usuario e PIN.' : 'Crie o usuario proprietario para liberar o terminal.' }}
+            {{
+              authStore.hasUsers
+                ? 'Informe usuário e PIN.'
+                : 'Crie o usuário proprietário para liberar o terminal.'
+            }}
           </p>
 
-          <Message v-if="authStore.initializationError" severity="warn" :closable="false">
+          <Message
+            v-if="authStore.initializationError"
+            severity="warn"
+            :closable="false"
+          >
             API indisponivel: {{ authStore.initializationError }}
           </Message>
 
@@ -19,37 +29,90 @@
             {{ errorMessage }}
           </Message>
 
-          <form v-if="authStore.hasUsers" class="flex flex-col gap-4" @submit.prevent="submitLogin">
+          <form
+            v-if="authStore.hasUsers"
+            class="flex flex-col gap-4"
+            @submit.prevent="submitLogin"
+          >
             <div class="flex flex-col gap-2">
-              <label class="text-sm font-medium text-zinc-700" for="login-username">Usuario</label>
-              <InputText id="login-username" v-model="loginUsername" autocomplete="username" />
+              <label
+                class="text-sm font-medium text-zinc-700"
+                for="login-username"
+                >Usuário</label
+              >
+              <InputText
+                id="login-username"
+                v-model="loginUsername"
+                autocomplete="username"
+              />
             </div>
 
             <div class="flex flex-col gap-2">
-              <label class="text-sm font-medium text-zinc-700" for="login-pin">PIN</label>
-              <Password id="login-pin" v-model="loginPin" toggle-mask :feedback="false" fluid inputmode="numeric" autocomplete="current-password" />
+              <label class="text-sm font-medium text-zinc-700" for="login-pin"
+                >PIN</label
+              >
+              <Password
+                id="login-pin"
+                v-model="loginPin"
+                toggle-mask
+                :feedback="false"
+                fluid
+                inputmode="numeric"
+                autocomplete="current-password"
+              />
             </div>
 
-            <Button type="submit" :label="isSubmitting ? 'Entrando...' : 'Entrar'" :loading="isSubmitting" />
+            <Button
+              type="submit"
+              :label="isSubmitting ? 'Entrando...' : 'Entrar'"
+              :loading="isSubmitting"
+            />
           </form>
 
-          <form v-else class="flex flex-col gap-4" @submit.prevent="submitBootstrapOwner">
+          <form
+            v-else
+            class="flex flex-col gap-4"
+            @submit.prevent="submitBootstrapOwner"
+          >
             <div class="flex flex-col gap-2">
-              <label class="text-sm font-medium text-zinc-700" for="owner-name">Nome</label>
+              <label class="text-sm font-medium text-zinc-700" for="owner-name"
+                >Nome</label
+              >
               <InputText id="owner-name" v-model="ownerFullName" />
             </div>
 
             <div class="flex flex-col gap-2">
-              <label class="text-sm font-medium text-zinc-700" for="owner-username">Usuario</label>
-              <InputText id="owner-username" v-model="ownerUsername" autocomplete="username" />
+              <label
+                class="text-sm font-medium text-zinc-700"
+                for="owner-username"
+                >Usuário</label
+              >
+              <InputText
+                id="owner-username"
+                v-model="ownerUsername"
+                autocomplete="username"
+              />
             </div>
 
             <div class="flex flex-col gap-2">
-              <label class="text-sm font-medium text-zinc-700" for="owner-pin">PIN</label>
-              <Password id="owner-pin" v-model="ownerPin" toggle-mask :feedback="false" fluid inputmode="numeric" />
+              <label class="text-sm font-medium text-zinc-700" for="owner-pin"
+                >PIN</label
+              >
+              <Password
+                id="owner-pin"
+                v-model="ownerPin"
+                toggle-mask
+                :feedback="false"
+                fluid
+                inputmode="numeric"
+              />
             </div>
 
-            <Button type="submit" :label="isSubmitting ? 'Criando...' : 'Criar usuario'" :loading="isSubmitting" />
+            <Button
+              type="submit"
+              :label="isSubmitting ? 'Criando...' : 'Criar usuário'"
+              :loading="isSubmitting"
+            />
           </form>
         </div>
       </template>
@@ -89,7 +152,7 @@ function readError(error: unknown): string {
   if (error instanceof Error) {
     return error.message
   }
-  return 'Nao foi possivel concluir a autenticacao.'
+  return 'Não foi possível concluir a autenticação.'
 }
 
 async function submitLogin(): Promise<void> {

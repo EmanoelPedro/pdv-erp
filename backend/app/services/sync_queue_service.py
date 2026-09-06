@@ -83,8 +83,7 @@ class SyncQueueService:
             raise LookupError(msg)
 
         try:
-            updated_entry = self.repository.update(
-                entry.mark_failed(error_message))
+            updated_entry = self.repository.update(entry.mark_failed(error_message))
             self.repository.db.commit()
             return updated_entry
         except Exception:

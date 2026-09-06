@@ -1,5 +1,11 @@
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { spawnSync } from 'node:child_process'
@@ -21,7 +27,10 @@ function run(command, args, options = {}) {
   if (result.status !== 0) {
     const stderr = result.stderr?.trim()
     const stdout = result.stdout?.trim()
-    const details = stderr || stdout || `command exited with code ${result.status ?? 'unknown'}`
+    const details =
+      stderr ||
+      stdout ||
+      `command exited with code ${result.status ?? 'unknown'}`
     throw new Error(`${command} ${args.join(' ')} failed: ${details}`)
   }
 
@@ -98,11 +107,13 @@ function readPythonMetadata(pythonCommand) {
 function computeDependencyFingerprint(pythonMetadata) {
   const hash = createHash('sha256')
   hash.update(readFileSync(backendPyprojectPath, 'utf-8'))
-  hash.update(JSON.stringify({
-    executable: pythonMetadata.executable,
-    version: pythonMetadata.version,
-    platform: pythonMetadata.platform
-  }))
+  hash.update(
+    JSON.stringify({
+      executable: pythonMetadata.executable,
+      version: pythonMetadata.version,
+      platform: pythonMetadata.platform
+    })
+  )
   return hash.digest('hex')
 }
 
@@ -173,10 +184,14 @@ function installRuntime(pythonMetadata) {
   const runtimePython = resolveRuntimePythonPath()
 
   if (commandExists('uv')) {
-    run('uv', ['pip', 'install', '--python', runtimePython, '--reinstall', backendDir], {
-    cwd: frontendDir,
-    stdio: 'inherit'
-  })
+    run(
+      'uv',
+      ['pip', 'install', '--python', runtimePython, '--reinstall', backendDir],
+      {
+        cwd: frontendDir,
+        stdio: 'inherit'
+      }
+    )
     return
   }
 

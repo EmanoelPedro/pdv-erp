@@ -32,7 +32,9 @@ class DashboardCategoryHighlightResponse(BaseModel):
     units_sold: int
 
     @classmethod
-    def from_service(cls, value: DashboardCategoryHighlight) -> "DashboardCategoryHighlightResponse":
+    def from_service(
+        cls, value: DashboardCategoryHighlight
+    ) -> "DashboardCategoryHighlightResponse":
         return cls(**asdict(value))
 
 
@@ -51,7 +53,9 @@ class DashboardDailyRevenuePointResponse(BaseModel):
     revenue: Decimal
 
     @classmethod
-    def from_service(cls, value: DashboardDailyRevenuePoint) -> "DashboardDailyRevenuePointResponse":
+    def from_service(
+        cls, value: DashboardDailyRevenuePoint
+    ) -> "DashboardDailyRevenuePointResponse":
         return cls(**asdict(value))
 
 
@@ -81,14 +85,12 @@ class DashboardSummaryResponse(BaseModel):
             latest_cash_difference=value.latest_cash_difference,
             latest_cash_difference_at=value.latest_cash_difference_at,
             best_selling_product_today=(
-                DashboardProductHighlightResponse.from_service(
-                    value.best_selling_product_today)
+                DashboardProductHighlightResponse.from_service(value.best_selling_product_today)
                 if value.best_selling_product_today is not None
                 else None
             ),
             best_category_today=(
-                DashboardCategoryHighlightResponse.from_service(
-                    value.best_category_today)
+                DashboardCategoryHighlightResponse.from_service(value.best_category_today)
                 if value.best_category_today is not None
                 else None
             ),

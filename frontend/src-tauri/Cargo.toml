@@ -2,7 +2,9 @@
 name = "pdv-desktop"
 version = "0.1.0"
 description = "Desktop shell for the PDV application"
-authors = ["PDV Team"]
+authors = ["Emanoel Pedro"]
+license = "MIT"
+repository = "https://github.com/EmanoelPedro/pdv-erp"
 edition = "2021"
 
 [build-dependencies]

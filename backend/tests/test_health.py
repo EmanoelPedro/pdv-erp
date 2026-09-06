@@ -83,9 +83,7 @@ def test_readiness_healthcheck_reports_pending_migrations(
     get_settings.cache_clear()
 
     assert response.status_code == 503
-    assert response.json() == {
-        "detail": "Database migrations are pending for the local runtime."
-    }
+    assert response.json() == {"detail": "Database migrations are pending for the local runtime."}
 
 
 def test_versioned_healthcheck_allows_frontend_origin() -> None:
@@ -101,9 +99,10 @@ def test_versioned_healthcheck_allows_frontend_origin() -> None:
 def test_frontend_dist_falls_back_to_index(monkeypatch, tmp_path: Path) -> None:
     frontend_dist = tmp_path / "frontend-dist"
     frontend_dist.mkdir()
-    (frontend_dist / "index.html").write_text("<html><body>pdv local</body></html>", encoding="utf-8")
-    (frontend_dist /
-     "manifest.webmanifest").write_text('{"name":"PDV"}', encoding="utf-8")
+    (frontend_dist / "index.html").write_text(
+        "<html><body>pdv local</body></html>", encoding="utf-8"
+    )
+    (frontend_dist / "manifest.webmanifest").write_text('{"name":"PDV"}', encoding="utf-8")
 
     monkeypatch.setenv("FRONTEND_DIST_DIR", str(frontend_dist))
     get_settings.cache_clear()

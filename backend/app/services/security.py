@@ -7,8 +7,7 @@ PBKDF2_ITERATIONS = 600_000
 
 def hash_pin(pin: str) -> str:
     salt = secrets.token_bytes(16)
-    digest = hashlib.pbkdf2_hmac(
-        "sha256", pin.encode("utf-8"), salt, PBKDF2_ITERATIONS)
+    digest = hashlib.pbkdf2_hmac("sha256", pin.encode("utf-8"), salt, PBKDF2_ITERATIONS)
     return f"{PBKDF2_ITERATIONS}${salt.hex()}${digest.hex()}"
 
 

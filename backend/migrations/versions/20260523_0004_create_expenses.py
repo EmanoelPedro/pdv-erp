@@ -19,8 +19,7 @@ depends_on: Sequence[str] | None = None
 def upgrade() -> None:
     op.create_table(
         "expenses",
-        sa.Column("id", sa.String(length=36),
-                  primary_key=True, nullable=False),
+        sa.Column("id", sa.String(length=36), primary_key=True, nullable=False),
         sa.Column(
             "cash_register_session_id",
             sa.String(length=36),
@@ -42,16 +41,18 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_expenses_cash_register_session_id", "expenses", [
-                    "cash_register_session_id"], unique=False)
-    op.create_index("ix_expenses_description", "expenses",
-                    ["description"], unique=False)
-    op.create_index("ix_expenses_category", "expenses",
-                    ["category"], unique=False)
-    op.create_index("ix_expenses_created_by_user_id", "expenses", [
-                    "created_by_user_id"], unique=False)
-    op.create_index("ix_expenses_expense_date", "expenses",
-                    ["expense_date"], unique=False)
+    op.create_index(
+        "ix_expenses_cash_register_session_id",
+        "expenses",
+        ["cash_register_session_id"],
+        unique=False,
+    )
+    op.create_index("ix_expenses_description", "expenses", ["description"], unique=False)
+    op.create_index("ix_expenses_category", "expenses", ["category"], unique=False)
+    op.create_index(
+        "ix_expenses_created_by_user_id", "expenses", ["created_by_user_id"], unique=False
+    )
+    op.create_index("ix_expenses_expense_date", "expenses", ["expense_date"], unique=False)
 
 
 def downgrade() -> None:
@@ -59,6 +60,5 @@ def downgrade() -> None:
     op.drop_index("ix_expenses_created_by_user_id", table_name="expenses")
     op.drop_index("ix_expenses_category", table_name="expenses")
     op.drop_index("ix_expenses_description", table_name="expenses")
-    op.drop_index("ix_expenses_cash_register_session_id",
-                  table_name="expenses")
+    op.drop_index("ix_expenses_cash_register_session_id", table_name="expenses")
     op.drop_table("expenses")

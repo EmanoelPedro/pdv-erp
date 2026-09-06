@@ -1,4 +1,9 @@
-export type PaymentMethod = 'CASH' | 'PIX' | 'DEBIT_CARD' | 'CREDIT_CARD' | 'MIXED'
+export type PaymentMethod =
+  | 'CASH'
+  | 'PIX'
+  | 'DEBIT_CARD'
+  | 'CREDIT_CARD'
+  | 'MIXED'
 
 export interface SaleItemPayload {
   product_id: string

@@ -3,7 +3,11 @@ from decimal import Decimal
 from uuid import UUID
 
 from app.domain.catalog import Category, Product
-from app.domain.exceptions import CategoryNotFoundError, DuplicateCategoryNameError, ProductNotFoundError
+from app.domain.exceptions import (
+    CategoryNotFoundError,
+    DuplicateCategoryNameError,
+    ProductNotFoundError,
+)
 from app.domain.shared import utc_now
 from app.domain.user import User
 from app.repositories.catalog_repository import CategoryRepository, ProductRepository

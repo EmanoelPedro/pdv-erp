@@ -26,8 +26,7 @@ def test_owner_can_upload_product_image(
 
     upload_response = client.post(
         f"/api/v1/catalog/products/{product_response.json()['id']}/image",
-        files={"image": ("pastel.png", BytesIO(
-            b"fake image bytes"), "image/png")},
+        files={"image": ("pastel.png", BytesIO(b"fake image bytes"), "image/png")},
         headers=owner_auth_headers,
     )
 
@@ -58,14 +57,14 @@ def test_upload_rejects_invalid_product_image(
 
     upload_response = client.post(
         f"/api/v1/catalog/products/{product_response.json()['id']}/image",
-        files={"image": ("produto.txt", BytesIO(
-            b"not an image"), "text/plain")},
+        files={"image": ("produto.txt", BytesIO(b"not an image"), "text/plain")},
         headers=owner_auth_headers,
     )
 
     assert upload_response.status_code == 422
-    assert upload_response.json(
-    )["detail"] == "Use uma imagem JPG, PNG, WEBP ou GIF para o produto."
+    assert (
+        upload_response.json()["detail"] == "Use uma imagem JPG, PNG, WEBP ou GIF para o produto."
+    )
 
 
 def test_owner_can_update_product_and_remove_image(
@@ -93,8 +92,7 @@ def test_owner_can_update_product_and_remove_image(
 
     client.post(
         f"/api/v1/catalog/products/{product_id}/image",
-        files={"image": ("pastel.png", BytesIO(
-            b"fake image bytes"), "image/png")},
+        files={"image": ("pastel.png", BytesIO(b"fake image bytes"), "image/png")},
         headers=owner_auth_headers,
     )
 
@@ -149,15 +147,13 @@ def test_owner_can_deactivate_and_restore_product(
         "/api/v1/catalog/products",
         headers=owner_auth_headers,
     )
-    assert all(product["id"] !=
-               product_id for product in list_active_response.json())
+    assert all(product["id"] != product_id for product in list_active_response.json())
 
     list_all_response = client.get(
         "/api/v1/catalog/products?include_inactive=true",
         headers=owner_auth_headers,
     )
-    assert any(product["id"] ==
-               product_id for product in list_all_response.json())
+    assert any(product["id"] == product_id for product in list_all_response.json())
 
     restore_response = client.post(
         f"/api/v1/catalog/products/{product_id}/restore",

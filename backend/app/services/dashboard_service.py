@@ -59,20 +59,14 @@ class DashboardService:
     def get_today_summary(self) -> DashboardSummary:
         today = utc_now().date()
         today_filters = ReportFilters(start_date=today, end_date=today)
-        last_week_filters = ReportFilters(
-            start_date=today - timedelta(days=6), end_date=today)
+        last_week_filters = ReportFilters(start_date=today - timedelta(days=6), end_date=today)
 
-        sales_overview = self.report_repository.get_sales_overview(
-            today_filters)
-        expenses_overview = self.report_repository.get_expenses_overview(
-            today_filters)
-        best_product_raw = self.report_repository.get_best_selling_product(
-            today_filters)
-        best_category_raw = self.report_repository.get_top_category_by_revenue(
-            today_filters)
+        sales_overview = self.report_repository.get_sales_overview(today_filters)
+        expenses_overview = self.report_repository.get_expenses_overview(today_filters)
+        best_product_raw = self.report_repository.get_best_selling_product(today_filters)
+        best_category_raw = self.report_repository.get_top_category_by_revenue(today_filters)
         hourly_rows = self.report_repository.get_hourly_sales(today_filters)
-        trend_rows = self.report_repository.get_revenue_by_day(
-            last_week_filters)
+        trend_rows = self.report_repository.get_revenue_by_day(last_week_filters)
         latest_cash_difference_raw = self.report_repository.get_latest_closed_cash_difference()
 
         revenue_today = self._money(sales_overview["sales_amount"])
@@ -88,8 +82,7 @@ class DashboardService:
             report_date=today,
             revenue_today=revenue_today,
             expenses_today=expenses_today,
-            profit_estimate_today=normalize_money(
-                revenue_today - expenses_today),
+            profit_estimate_today=normalize_money(revenue_today - expenses_today),
             average_ticket_today=average_ticket_today,
             sales_count_today=sales_count_today,
             latest_cash_difference=(
@@ -99,11 +92,11 @@ class DashboardService:
             ),
             latest_cash_difference_at=(
                 latest_cash_difference_raw["closed_at"].date()
-                if latest_cash_difference_raw is not None and latest_cash_difference_raw["closed_at"] is not None
+                if latest_cash_difference_raw is not None
+                and latest_cash_difference_raw["closed_at"] is not None
                 else None
             ),
-            best_selling_product_today=self._map_best_product(
-                best_product_raw),
+            best_selling_product_today=self._map_best_product(best_product_raw),
             best_category_today=self._map_best_category(best_category_raw),
             sales_by_hour_today=self._build_hourly_points(hourly_rows),
             revenue_last_7_days=self._build_daily_points(today, trend_rows),
@@ -119,7 +112,9 @@ class DashboardService:
             revenue=self._money(row["revenue"]),
         )
 
-    def _map_best_category(self, row: dict[str, object] | None) -> DashboardCategoryHighlight | None:
+    def _map_best_category(
+        self, row: dict[str, object] | None
+    ) -> DashboardCategoryHighlight | None:
         if row is None:
             return None
         return DashboardCategoryHighlight(
@@ -139,8 +134,7 @@ class DashboardService:
                 DashboardHourlyPoint(
                     hour=label,
                     sales_count=int(row["sales_count"] or 0) if row else 0,
-                    revenue=self._money(
-                        row["revenue"]) if row else Decimal("0.00"),
+                    revenue=self._money(row["revenue"]) if row else Decimal("0.00"),
                 ),
             )
         return points

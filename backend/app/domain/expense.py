@@ -50,8 +50,7 @@ class Expense:
     ) -> "Expense":
         normalized_amount = normalize_money(amount)
         if normalized_amount <= Decimal("0.00"):
-            raise InvalidExpenseAmountError(
-                "Expense amount must be greater than zero.")
+            raise InvalidExpenseAmountError("Expense amount must be greater than zero.")
 
         timestamp = ensure_utc(created_at or utc_now())
         occurred_at = ensure_utc(expense_date or timestamp)

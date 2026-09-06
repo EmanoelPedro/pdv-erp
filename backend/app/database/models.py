@@ -29,22 +29,14 @@ class CashRegisterSessionModel(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     status: Mapped[str] = mapped_column(String(20), nullable=False)
-    opening_amount: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), nullable=False)
-    expected_amount: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), nullable=False)
-    closing_amount: Mapped[Decimal | None] = mapped_column(
-        Numeric(12, 2), nullable=True)
-    difference_amount: Mapped[Decimal | None] = mapped_column(
-        Numeric(12, 2), nullable=True)
-    opened_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    closed_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+    opening_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    expected_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    closing_amount: Mapped[Decimal | None] = mapped_column(Numeric(12, 2), nullable=True)
+    difference_amount: Mapped[Decimal | None] = mapped_column(Numeric(12, 2), nullable=True)
+    opened_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    closed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     @classmethod
     def from_domain(cls, session: CashRegisterSession) -> "CashRegisterSessionModel":
@@ -92,16 +84,12 @@ class UserModel(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     full_name: Mapped[str] = mapped_column(String(120), nullable=False)
-    username: Mapped[str] = mapped_column(
-        String(60), nullable=False, unique=True, index=True)
+    username: Mapped[str] = mapped_column(String(60), nullable=False, unique=True, index=True)
     role: Mapped[str] = mapped_column(String(20), nullable=False)
     pin_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    is_active: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, default=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     @classmethod
     def from_domain(cls, user: User) -> "UserModel":
@@ -134,13 +122,11 @@ class UserSessionModel(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     user_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("users.id"), nullable=False, index=True)
-    token_hash: Mapped[str] = mapped_column(
-        String(128), nullable=False, unique=True, index=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    expires_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+        String(36), ForeignKey("users.id"), nullable=False, index=True
+    )
+    token_hash: Mapped[str] = mapped_column(String(128), nullable=False, unique=True, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     @classmethod
     def from_domain(cls, session: UserSession) -> "UserSessionModel":
@@ -166,14 +152,10 @@ class CategoryModel(Base):
     __tablename__ = "categories"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    name: Mapped[str] = mapped_column(
-        String(120), nullable=False, unique=True, index=True)
-    is_active: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, default=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+    name: Mapped[str] = mapped_column(String(120), nullable=False, unique=True, index=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     @classmethod
     def from_domain(cls, category: Category) -> "CategoryModel":
@@ -200,17 +182,15 @@ class ProductModel(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     category_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("categories.id"), nullable=False, index=True)
+        String(36), ForeignKey("categories.id"), nullable=False, index=True
+    )
     name: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
     price: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     emoji: Mapped[str | None] = mapped_column(String(16), nullable=True)
     image_path: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    is_active: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, default=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     @classmethod
     def from_domain(cls, product: Product) -> "ProductModel":
@@ -245,28 +225,22 @@ class SaleModel(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     cash_register_session_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("cash_register_sessions.id"), nullable=False, index=True)
+        String(36), ForeignKey("cash_register_sessions.id"), nullable=False, index=True
+    )
     seller_user_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("users.id"), nullable=False, index=True)
+        String(36), ForeignKey("users.id"), nullable=False, index=True
+    )
     payment_method: Mapped[str] = mapped_column(String(20), nullable=False)
-    subtotal_amount: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), nullable=False)
-    total_amount: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), nullable=False)
-    cash_amount: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), nullable=False)
+    subtotal_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    total_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    cash_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     pix_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
-    debit_card_amount: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), nullable=False)
-    credit_card_amount: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), nullable=False)
+    debit_card_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    credit_card_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     status: Mapped[str] = mapped_column(String(20), nullable=False)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    cancelled_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     @classmethod
     def from_domain(cls, sale: Sale) -> "SaleModel":
@@ -312,16 +286,14 @@ class SaleItemModel(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     sale_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("sales.id"), nullable=False, index=True)
-    product_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("products.id"), nullable=False)
+        String(36), ForeignKey("sales.id"), nullable=False, index=True
+    )
+    product_id: Mapped[str] = mapped_column(String(36), ForeignKey("products.id"), nullable=False)
     product_name: Mapped[str] = mapped_column(String(120), nullable=False)
     unit_price: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
-    total_price: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), nullable=False)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+    total_price: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     @classmethod
     def from_domain(cls, item: SaleItem, sale_id: UUID) -> "SaleItemModel":
@@ -353,22 +325,21 @@ class ExpenseModel(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     cash_register_session_id: Mapped[str | None] = mapped_column(
-        String(36), ForeignKey("cash_register_sessions.id"), nullable=True, index=True)
-    description: Mapped[str] = mapped_column(
-        String(160), nullable=False, index=True)
+        String(36), ForeignKey("cash_register_sessions.id"), nullable=True, index=True
+    )
+    description: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
-    category: Mapped[str] = mapped_column(
-        String(30), nullable=False, index=True)
+    category: Mapped[str] = mapped_column(String(30), nullable=False, index=True)
     payment_method: Mapped[str] = mapped_column(String(20), nullable=False)
     notes: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_by_user_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("users.id"), nullable=False, index=True)
+        String(36), ForeignKey("users.id"), nullable=False, index=True
+    )
     expense_date: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, index=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+        DateTime(timezone=True), nullable=False, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     @classmethod
     def from_domain(cls, expense: Expense) -> "ExpenseModel":
@@ -410,7 +381,8 @@ class ExpenseModel(Base):
         return Expense(
             id=UUID(self.id),
             cash_register_session_id=(
-                UUID(self.cash_register_session_id) if self.cash_register_session_id else None),
+                UUID(self.cash_register_session_id) if self.cash_register_session_id else None
+            ),
             description=self.description,
             amount=self.amount,
             category=ExpenseCategory(self.category),
@@ -427,20 +399,17 @@ class SyncQueueEntryModel(Base):
     __tablename__ = "sync_queue"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    entity_type: Mapped[str] = mapped_column(
-        String(60), nullable=False, index=True)
+    entity_type: Mapped[str] = mapped_column(String(60), nullable=False, index=True)
     entity_id: Mapped[str] = mapped_column(String(36), nullable=False)
     event_type: Mapped[str] = mapped_column(String(80), nullable=False)
     payload: Mapped[str] = mapped_column(String, nullable=False)
-    sync_status: Mapped[str] = mapped_column(
-        String(20), nullable=False, index=True)
-    retry_count: Mapped[int] = mapped_column(
-        Integer, nullable=False, default=0)
+    sync_status: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    retry_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     last_error: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, index=True)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False)
+        DateTime(timezone=True), nullable=False, index=True
+    )
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     @classmethod
     def from_domain(cls, entry: SyncQueueEntry) -> "SyncQueueEntryModel":

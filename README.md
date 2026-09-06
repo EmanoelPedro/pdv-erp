@@ -1,87 +1,104 @@
-# PDV Local-First
+# PDV Local
 
-Bootstrap inicial de um sistema de PDV e controle operacional para uma loja familiar de salgados, pastel, caldo de cana, lanches, hamburguer e pizza.
+[![CI](https://github.com/EmanoelPedro/pdv-erp/actions/workflows/ci.yml/badge.svg)](https://github.com/EmanoelPedro/pdv-erp/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## Stack
+Sistema de ponto de venda local-first para pequenos estabelecimentos. O projeto reúne operação de caixa, catálogo, vendas, despesas e indicadores em uma aplicação que funciona localmente, sem depender de serviços externos para o fluxo principal.
 
-- Backend: Python 3.13+, FastAPI, SQLAlchemy, SQLite, Alembic, Pydantic, Ruff, Pytest, uv
-- Frontend: Vue 3, Vite, TypeScript, Pinia, TailwindCSS, base PWA, pnpm
+Este é um projeto pessoal open source, construído para demonstrar decisões de produto, arquitetura em camadas, testes automatizados e distribuição multiplataforma.
 
-## Estrutura
+## Interface
 
-- `backend/`: API local, configuracao, banco e testes
-- `frontend/`: shell da interface, roteamento, estado global e base PWA
-- `docs/`: documentacao curta de arquitetura e decisoes
+![Tela de operação do caixa com catálogo e formas de pagamento](docs/assets/pos-screen.png)
 
-## Comandos
+## Funcionalidades
 
-### Backend
+- primeiro acesso com criação do proprietário e autenticação por PIN
+- perfis de proprietário e funcionário
+- abertura e fechamento de caixa com conferência do saldo esperado
+- catálogo de categorias e produtos, incluindo fotos
+- registro de vendas com dinheiro, Pix, débito, crédito ou pagamento misto
+- cálculo de troco e totais por sessão de caixa
+- lançamento e manutenção de despesas
+- dashboard e relatórios operacionais
+- persistência local em SQLite e migrações com Alembic
+- interface web/PWA e aplicação desktop com Tauri
 
-- `cd backend && uv run --python "$(command -v python3)" uvicorn app.main:app --reload`
-- `cd backend && uv run --python "$(command -v python3)" pytest`
-- `cd backend && uv run --python "$(command -v python3)" ruff check .`
-- `cd backend && uv run --python "$(command -v python3)" alembic upgrade head`
-- `cd backend && uv run --python "$(command -v python3)" alembic current`
+## Tecnologias
 
-### Frontend
+- Backend: Python 3.13+, FastAPI, SQLAlchemy, SQLite, Alembic, Pydantic, Ruff e Pytest
+- Frontend: Vue 3, TypeScript, Vite, Pinia, PrimeVue, Tailwind CSS e pnpm
+- Desktop: Tauri 2 e Rust
 
-- `cd frontend && pnpm install`
-- `cd frontend && pnpm dev`
-- `cd frontend && pnpm build`
-- `cd frontend && pnpm desktop:prepare-backend`
-- `cd frontend && pnpm desktop:prepare-python`
-- `cd frontend && pnpm desktop:dev`
-- `cd frontend && pnpm desktop:build:linux`
-- `cd frontend && pnpm desktop:build:windows`
-- `cd frontend && pnpm lint`
+## Executar localmente
 
-### Raiz
+Pré-requisitos:
 
-- `make backend-dev`
-- `make frontend-dev`
-- `make desktop-dev`
-- `make desktop-build`
-- `make desktop-build-linux`
-- `make desktop-build-windows`
-- `make lint`
-- `make test`
-- `make backend-migrate`
-- `make backend-migrate-status`
-- `make local-release-build`
+- Python 3.13 ou superior
+- [uv](https://docs.astral.sh/uv/)
+- Node.js 22 ou superior
+- pnpm 10
 
-## Feature atual
+Clone e prepare o ambiente:
 
-O primeiro fluxo vertical de negocio ja implementado e o de sessao de caixa:
+```bash
+git clone https://github.com/EmanoelPedro/pdv-erp.git
+cd pdv-erp
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+pnpm --dir frontend install --frozen-lockfile
+cd backend && uv sync --locked --all-groups && uv run alembic upgrade head && cd ..
+```
 
-- abrir caixa com valor inicial
-- consultar o caixa aberto atual
-- fechar caixa com valor contado
-- calcular diferenca de fechamento
-- exigir PIN do proprietario para o fechamento
+Em dois terminais, inicie backend e frontend:
 
-O PIN usado por padrao no bootstrap e `1234` e pode ser alterado por `OWNER_ACTION_PIN` em `backend/.env`.
+```bash
+make backend-dev
+```
 
-## Escopo atual
+```bash
+make frontend-dev
+```
 
-Esta etapa implementa a fundacao do projeto e o primeiro recurso real de negocio, focado em controle do caixa. Vendas, despesas e relatorios operacionais completos entram depois sobre essa base.
+A interface estará disponível em `http://127.0.0.1:5173`. No primeiro acesso, a aplicação solicita os dados e o PIN do proprietário.
 
-## Observacao de ambiente
+## Qualidade
 
-Neste ambiente Linux, o `uv` encontrou primeiro um Python 3.13 sem suporte a `sqlite3`. Os comandos do backend usam explicitamente o `python3` do sistema para garantir suporte a SQLite.
+```bash
+make lint
+make test
+cd frontend && pnpm format
+```
 
-## Entrega local para usuario final
+O pipeline de integração contínua executa lint, verificação de formatação, testes do backend e build do frontend em cada pull request.
 
-Para entregar em uma maquina Linux sem expor fluxo de desenvolvimento, gere um pacote local com `make local-release-build`.
+## Aplicação desktop
 
-Esse pacote:
+O runtime desktop inicia o backend local automaticamente e mantém banco, mídia e logs no diretório de dados da aplicação.
 
-- builda o frontend para producao
-- empacota backend e frontend em uma release versionada
-- instala em uma pasta fixa com dados fora da versao
-- permite atualizar para a versao 2.0 sem sobrescrever `pdv.db` ou `media/`
+```bash
+make desktop-dev
+make desktop-build-linux
+# ou, em um host Windows:
+make desktop-build-windows
+```
 
-Veja [docs/local-linux-release.md](docs/local-linux-release.md) para o fluxo de instalacao, inicializacao e atualizacao.
+Consulte [desenvolvimento desktop](docs/desktop-development.md) para os pré-requisitos nativos e [entrega local no Linux](docs/local-linux-release.md) para a alternativa baseada em navegador.
 
-Veja [docs/architecture.md](docs/architecture.md) para a visao geral das camadas e tradeoffs.
+## Arquitetura
 
-Veja [docs/desktop-development.md](docs/desktop-development.md) para o fluxo desktop com Tauri, supervisor do backend local e pre requisitos nativos de Linux e Windows.
+O backend é um monólito modular dividido em API, domínio, serviços e repositórios. O frontend consome a mesma API HTTP tanto no navegador quanto no shell desktop. A visão detalhada e os principais trade-offs estão em [docs/architecture.md](docs/architecture.md).
+
+## Limitações atuais
+
+- a fila local de sincronização está preparada, mas ainda não existe um serviço em nuvem
+- emissão fiscal e controle avançado de estoque não fazem parte do escopo
+- os instaladores desktop ainda não são publicados automaticamente como releases
+
+## Contribuição e segurança
+
+Leia [CONTRIBUTING.md](CONTRIBUTING.md) antes de enviar uma alteração. Vulnerabilidades devem seguir o processo descrito em [SECURITY.md](SECURITY.md), sem abertura de issue pública.
+
+## Licença
+
+Distribuído sob a licença MIT. Consulte [LICENSE](LICENSE).

@@ -6,14 +6,12 @@ from pydantic import BaseModel, Field
 
 from app.domain.user import User, UserRole
 
-PinInput = Annotated[str, Field(
-    min_length=4, max_length=12, pattern=r"^[0-9]+$")]
+PinInput = Annotated[str, Field(min_length=4, max_length=12, pattern=r"^[0-9]+$")]
 
 
 class RegisterUserRequest(BaseModel):
     full_name: Annotated[str, Field(min_length=2, max_length=120)]
-    username: Annotated[str, Field(
-        min_length=3, max_length=60, pattern=r"^[a-zA-Z0-9_.-]+$")]
+    username: Annotated[str, Field(min_length=3, max_length=60, pattern=r"^[a-zA-Z0-9_.-]+$")]
     pin: PinInput
     role: UserRole | None = None
 

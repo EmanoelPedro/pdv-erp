@@ -7,7 +7,11 @@
     <template v-else-if="summary">
       <div class="dashboard-grid">
         <section class="dashboard-kpis-row">
-          <article v-for="card in kpiCards" :key="card.title" class="dashboard-kpi-card">
+          <article
+            v-for="card in kpiCards"
+            :key="card.title"
+            class="dashboard-kpi-card"
+          >
             <div class="dashboard-kpi-head">
               <span class="dashboard-kpi-icon" :class="card.iconTone">
                 <i :class="card.icon"></i>
@@ -28,37 +32,59 @@
         <section class="dashboard-panel dashboard-cash-panel lg:col-span-6">
           <div class="dashboard-panel-header">
             <div>
-              <div class="dashboard-panel-kicker">Situacao do caixa</div>
+              <div class="dashboard-panel-kicker">Situação do caixa</div>
               <h2 class="dashboard-panel-title">Fechamento e conferencia</h2>
             </div>
-            <Tag :value="cashStatus.label" :severity="cashStatus.severity" rounded />
+            <Tag
+              :value="cashStatus.label"
+              :severity="cashStatus.severity"
+              rounded
+            />
           </div>
 
           <div class="dashboard-cash-stats">
             <div class="dashboard-cash-item">
               <span class="dashboard-mini-label">Esperado</span>
-              <strong class="dashboard-cash-value">{{ formatCurrency(cashSummary.expected) }}</strong>
+              <strong class="dashboard-cash-value">{{
+                formatCurrency(cashSummary.expected)
+              }}</strong>
             </div>
 
             <div class="dashboard-cash-item">
               <span class="dashboard-mini-label">Contado</span>
-              <strong class="dashboard-cash-value">{{ formatNullableCurrency(cashSummary.counted) }}</strong>
+              <strong class="dashboard-cash-value">{{
+                formatNullableCurrency(cashSummary.counted)
+              }}</strong>
             </div>
 
             <div class="dashboard-cash-item">
-              <span class="dashboard-mini-label">Diferenca</span>
-              <strong class="dashboard-cash-value" :class="cashStatus.textClass">{{ formatNullableCurrency(cashSummary.difference) }}</strong>
+              <span class="dashboard-mini-label">Diferença</span>
+              <strong
+                class="dashboard-cash-value"
+                :class="cashStatus.textClass"
+                >{{ formatNullableCurrency(cashSummary.difference) }}</strong
+              >
             </div>
 
             <div class="dashboard-cash-item dashboard-cash-status-box">
               <span class="dashboard-mini-label">Status</span>
-              <Tag :value="cashStatus.label" :severity="cashStatus.severity" rounded />
-              <span class="dashboard-cash-caption">{{ cashStatus.caption }}</span>
+              <Tag
+                :value="cashStatus.label"
+                :severity="cashStatus.severity"
+                rounded
+              />
+              <span class="dashboard-cash-caption">{{
+                cashStatus.caption
+              }}</span>
             </div>
           </div>
 
           <div class="dashboard-cash-progress-shell">
-            <ProgressBar :value="cashBalanceProgress" :show-value="false" :class="cashStatus.progressClass" />
+            <ProgressBar
+              :value="cashBalanceProgress"
+              :show-value="false"
+              :class="cashStatus.progressClass"
+            />
           </div>
 
           <div class="dashboard-cash-bottom">
@@ -67,11 +93,19 @@
               <span>{{ cashTimestampLabel }}</span>
             </div>
 
-            <Button label="Ver fechamento" size="small" severity="secondary" outlined @click="router.push('/relatorios')" />
+            <Button
+              label="Ver fechamento"
+              size="small"
+              severity="secondary"
+              outlined
+              @click="router.push('/relatorios')"
+            />
           </div>
         </section>
 
-        <section class="dashboard-panel dashboard-highlights-panel lg:col-span-6">
+        <section
+          class="dashboard-panel dashboard-highlights-panel lg:col-span-6"
+        >
           <div class="dashboard-panel-header">
             <div>
               <div class="dashboard-panel-kicker">Destaques de hoje</div>
@@ -80,14 +114,20 @@
           </div>
 
           <div class="dashboard-highlights-grid">
-            <article v-for="item in highlightCards" :key="item.title" class="dashboard-highlight-card">
+            <article
+              v-for="item in highlightCards"
+              :key="item.title"
+              class="dashboard-highlight-card"
+            >
               <span class="dashboard-highlight-icon" :class="item.iconTone">
                 <i :class="item.icon"></i>
               </span>
 
               <div class="min-w-0">
                 <div class="dashboard-mini-label">{{ item.title }}</div>
-                <strong class="dashboard-highlight-title">{{ item.value }}</strong>
+                <strong class="dashboard-highlight-title">{{
+                  item.value
+                }}</strong>
                 <div class="dashboard-highlight-subtitle">{{ item.meta }}</div>
               </div>
             </article>
@@ -104,22 +144,39 @@
           </div>
 
           <div class="dashboard-chart-shell dashboard-chart-shell-bar">
-            <Chart v-if="hasHourlySales" type="bar" :data="hourlyChartData" :options="hourlyChartOptions" class="dashboard-chart" />
-            <div v-else class="dashboard-chart-empty">Nenhuma venda registrada hoje.</div>
+            <Chart
+              v-if="hasHourlySales"
+              type="bar"
+              :data="hourlyChartData"
+              :options="hourlyChartOptions"
+              class="dashboard-chart"
+            />
+            <div v-else class="dashboard-chart-empty">
+              Nenhuma venda registrada hoje.
+            </div>
           </div>
         </section>
 
         <section class="dashboard-panel dashboard-chart-panel lg:col-span-6">
           <div class="dashboard-panel-header">
             <div>
-              <div class="dashboard-panel-kicker">Receita dos ultimos 7 dias</div>
+              <div class="dashboard-panel-kicker">
+                Receita dos últimos 7 dias
+              </div>
               <h2 class="dashboard-panel-title">Tendencia recente</h2>
             </div>
-            <span class="dashboard-note-chip" :class="salesTrend.toneClass">{{ salesTrend.label }}</span>
+            <span class="dashboard-note-chip" :class="salesTrend.toneClass">{{
+              salesTrend.label
+            }}</span>
           </div>
 
           <div class="dashboard-chart-shell dashboard-chart-shell-line">
-            <Chart type="line" :data="weeklyRevenueChartData" :options="weeklyRevenueChartOptions" class="dashboard-chart" />
+            <Chart
+              type="line"
+              :data="weeklyRevenueChartData"
+              :options="weeklyRevenueChartOptions"
+              class="dashboard-chart"
+            />
           </div>
         </section>
 
@@ -127,20 +184,31 @@
           <div class="dashboard-panel-header">
             <div>
               <div class="dashboard-panel-kicker">Alertas e observacoes</div>
-              <h2 class="dashboard-panel-title">O que precisa de atencao</h2>
+              <h2 class="dashboard-panel-title">O que precisa de atenção</h2>
             </div>
           </div>
 
           <div class="dashboard-alert-list">
-            <article v-for="alert in alerts" :key="alert.title" class="dashboard-alert-card" :class="alert.cardClass">
+            <article
+              v-for="alert in alerts"
+              :key="alert.title"
+              class="dashboard-alert-card"
+              :class="alert.cardClass"
+            >
               <span class="dashboard-alert-icon" :class="alert.iconTone">
                 <i :class="alert.icon"></i>
               </span>
 
               <div class="min-w-0 flex-1">
                 <div class="dashboard-alert-head">
-                  <strong class="dashboard-alert-title">{{ alert.title }}</strong>
-                  <Tag :value="alert.badge" :severity="alert.severity" rounded />
+                  <strong class="dashboard-alert-title">{{
+                    alert.title
+                  }}</strong>
+                  <Tag
+                    :value="alert.badge"
+                    :severity="alert.severity"
+                    rounded
+                  />
                 </div>
                 <p class="dashboard-alert-text">{{ alert.text }}</p>
               </div>
@@ -151,15 +219,21 @@
         <section class="dashboard-panel dashboard-summary-panel lg:col-span-3">
           <div class="dashboard-panel-header">
             <div>
-              <div class="dashboard-panel-kicker">Resumo rapido</div>
+              <div class="dashboard-panel-kicker">Resumo rápido</div>
               <h2 class="dashboard-panel-title">Fechamento do dia</h2>
             </div>
           </div>
 
           <div class="dashboard-summary-list">
-            <div v-for="item in quickSummaryItems" :key="item.label" class="dashboard-summary-row">
+            <div
+              v-for="item in quickSummaryItems"
+              :key="item.label"
+              class="dashboard-summary-row"
+            >
               <span class="dashboard-summary-label">{{ item.label }}</span>
-              <strong class="dashboard-summary-value" :class="item.toneClass">{{ item.value }}</strong>
+              <strong class="dashboard-summary-value" :class="item.toneClass">{{
+                item.value
+              }}</strong>
             </div>
           </div>
         </section>
@@ -167,21 +241,41 @@
         <section class="dashboard-panel dashboard-payments-panel lg:col-span-3">
           <div class="dashboard-panel-header">
             <div>
-              <div class="dashboard-panel-kicker">Distribuicao de pagamentos</div>
+              <div class="dashboard-panel-kicker">
+                Distribuicao de pagamentos
+              </div>
               <h2 class="dashboard-panel-title">Hoje</h2>
             </div>
           </div>
 
           <div class="dashboard-payment-layout">
             <div class="dashboard-donut-shell">
-              <Chart v-if="paymentReport.length > 0" type="doughnut" :data="paymentChartData" :options="paymentChartOptions" class="dashboard-chart" />
-              <div v-else class="dashboard-chart-empty dashboard-chart-empty-small">Sem pagamentos no dia.</div>
+              <Chart
+                v-if="paymentReport.length > 0"
+                type="doughnut"
+                :data="paymentChartData"
+                :options="paymentChartOptions"
+                class="dashboard-chart"
+              />
+              <div
+                v-else
+                class="dashboard-chart-empty dashboard-chart-empty-small"
+              >
+                Sem pagamentos no dia.
+              </div>
             </div>
 
             <div class="dashboard-payment-legend">
-              <div v-for="item in paymentLegend" :key="item.label" class="dashboard-payment-row">
+              <div
+                v-for="item in paymentLegend"
+                :key="item.label"
+                class="dashboard-payment-row"
+              >
                 <div class="dashboard-payment-row-main">
-                  <span class="dashboard-payment-dot" :style="{ backgroundColor: item.color }"></span>
+                  <span
+                    class="dashboard-payment-dot"
+                    :style="{ backgroundColor: item.color }"
+                  ></span>
                   <span class="dashboard-payment-label">{{ item.label }}</span>
                 </div>
                 <div class="dashboard-payment-values">
@@ -192,16 +286,32 @@
             </div>
           </div>
 
-          <Button label="Ver todos os relatorios" size="small" severity="secondary" outlined class="mt-auto" @click="router.push('/relatorios')" />
+          <Button
+            label="Ver todos os relatórios"
+            size="small"
+            severity="secondary"
+            outlined
+            class="mt-auto"
+            @click="router.push('/relatorios')"
+          />
         </section>
       </div>
     </template>
 
-    <Dialog v-model:visible="showErrorDialog" modal header="Atencao" :style="{ width: '28rem', maxWidth: '92vw' }">
+    <Dialog
+      v-model:visible="showErrorDialog"
+      modal
+      header="Atenção"
+      :style="{ width: '28rem', maxWidth: '92vw' }"
+    >
       <div class="text-sm leading-6 text-zinc-700">{{ errorMessage }}</div>
 
       <template #footer>
-        <Button label="Fechar" severity="secondary" @click="showErrorDialog = false" />
+        <Button
+          label="Fechar"
+          severity="secondary"
+          @click="showErrorDialog = false"
+        />
       </template>
     </Dialog>
   </section>
@@ -219,8 +329,16 @@ import ProgressSpinner from 'primevue/progressspinner'
 import Tag from 'primevue/tag'
 
 import { useAppTopbar } from '@/composables/useAppTopbar'
-import { getDashboardSummary, listPaymentMethodReport, listSalesReport } from '@/services/analytics'
-import { getCurrentCashRegister, getLastClosedSession, listCashRegisterHistory } from '@/services/cashRegister'
+import {
+  getDashboardSummary,
+  listPaymentMethodReport,
+  listSalesReport
+} from '@/services/analytics'
+import {
+  getCurrentCashRegister,
+  getLastClosedSession,
+  listCashRegisterHistory
+} from '@/services/cashRegister'
 import { ApiError } from '@/services/http'
 import type { DashboardSummary } from '@/types/dashboard'
 import type { CashRegisterSession } from '@/types/cashRegister'
@@ -324,10 +442,14 @@ const displayHourlyPoints = computed(() =>
   })
 )
 
-const hasHourlySales = computed(() => displayHourlyPoints.value.some((point) => Number(point.revenue) > 0))
+const hasHourlySales = computed(() =>
+  displayHourlyPoints.value.some((point) => Number(point.revenue) > 0)
+)
 
 const strongestHour = computed(() => {
-  const top = [...displayHourlyPoints.value].sort((left, right) => Number(right.revenue) - Number(left.revenue))[0]
+  const top = [...displayHourlyPoints.value].sort(
+    (left, right) => Number(right.revenue) - Number(left.revenue)
+  )[0]
 
   if (!top || Number(top.revenue) <= 0) {
     return { value: 'Sem pico', meta: 'Nenhuma venda no dia' }
@@ -393,14 +515,14 @@ const cashStatus = computed(() => {
       return {
         label: 'Balanceado',
         severity: 'success' as const,
-        caption: 'Fechamento sem diferenca',
+        caption: 'Fechamento sem diferença',
         textClass: 'dashboard-text-good',
         progressClass: 'dashboard-progress-good'
       }
     }
     if (difference <= 10) {
       return {
-        label: 'Atencao',
+        label: 'Atenção',
         severity: 'warn' as const,
         caption: 'Pequena divergencia',
         textClass: 'dashboard-text-warn',
@@ -419,8 +541,10 @@ const cashStatus = computed(() => {
 
   return {
     label: currentSession.value ? 'Em aberto' : 'Sem caixa',
-    severity: currentSession.value ? 'secondary' as const : 'warn' as const,
-    caption: currentSession.value ? 'Aguardando fechamento' : 'Nenhum caixa ativo',
+    severity: currentSession.value ? ('secondary' as const) : ('warn' as const),
+    caption: currentSession.value
+      ? 'Aguardando fechamento'
+      : 'Nenhum caixa ativo',
     textClass: 'dashboard-text-neutral',
     progressClass: 'dashboard-progress-neutral'
   }
@@ -439,12 +563,12 @@ const cashBalanceProgress = computed(() => {
 
 const cashTimestampLabel = computed(() => {
   if (lastClosedSession.value?.closed_at) {
-    return `Ultimo fechamento: ${formatDateTime(lastClosedSession.value.closed_at)}`
+    return `Último fechamento: ${formatDateTime(lastClosedSession.value.closed_at)}`
   }
   if (currentSession.value?.opened_at) {
     return `Caixa atual aberto em ${formatDateTime(currentSession.value.opened_at)}`
   }
-  return 'Sem historico de fechamento'
+  return 'Sem histórico de fechamento'
 })
 
 const kpiCards = computed<KpiCard[]>(() => {
@@ -457,11 +581,17 @@ const kpiCards = computed<KpiCard[]>(() => {
   const todayExpenses = Number(summary.value.expenses_today)
   const yesterdayExpenses = Number(yesterdaySalesRow.value?.expenses ?? '0')
   const todayProfit = Number(summary.value.profit_estimate_today)
-  const yesterdayProfit = Number(yesterdaySalesRow.value?.estimated_result ?? '0')
+  const yesterdayProfit = Number(
+    yesterdaySalesRow.value?.estimated_result ?? '0'
+  )
   const todaySalesCount = summary.value.sales_count_today
   const yesterdaySalesCount = yesterdaySalesRow.value?.sales_count ?? 0
   const todayTicket = Number(summary.value.average_ticket_today)
-  const yesterdayTicket = yesterdaySalesCount > 0 ? Number(yesterdaySalesRow.value?.final_sales ?? '0') / yesterdaySalesCount : 0
+  const yesterdayTicket =
+    yesterdaySalesCount > 0
+      ? Number(yesterdaySalesRow.value?.final_sales ?? '0') /
+        yesterdaySalesCount
+      : 0
 
   return [
     {
@@ -492,7 +622,7 @@ const kpiCards = computed<KpiCard[]>(() => {
       iconTone: 'dashboard-icon-good'
     },
     {
-      title: 'Ticket medio',
+      title: 'Ticket médio',
       value: formatCurrency(summary.value.average_ticket_today),
       deltaLabel: buildDeltaLabel(todayTicket, yesterdayTicket),
       deltaTone: deltaClass(todayTicket, yesterdayTicket),
@@ -515,7 +645,8 @@ const kpiCards = computed<KpiCard[]>(() => {
 const highlightCards = computed<HighlightCard[]>(() => [
   {
     title: 'Produto mais vendido',
-    value: summary.value?.best_selling_product_today?.product_name ?? 'Sem vendas',
+    value:
+      summary.value?.best_selling_product_today?.product_name ?? 'Sem vendas',
     meta: summary.value?.best_selling_product_today
       ? `${summary.value.best_selling_product_today.quantity_sold} unidades`
       : 'Nenhum item saiu hoje',
@@ -524,7 +655,9 @@ const highlightCards = computed<HighlightCard[]>(() => [
   },
   {
     title: 'Categoria com mais receita',
-    value: summary.value?.best_category_today?.category_name ?? 'Sem categoria lider',
+    value:
+      summary.value?.best_category_today?.category_name ??
+      'Sem categoria líder',
     meta: summary.value?.best_category_today
       ? formatCurrency(summary.value.best_category_today.revenue)
       : 'Sem receita relevante',
@@ -539,7 +672,7 @@ const highlightCards = computed<HighlightCard[]>(() => [
     iconTone: 'dashboard-highlight-teal'
   },
   {
-    title: 'Melhor horario',
+    title: 'Melhor horário',
     value: strongestHour.value.value,
     meta: strongestHour.value.meta,
     icon: 'pi pi-clock',
@@ -555,29 +688,40 @@ const alerts = computed<DashboardAlert[]>(() => {
   const previousExpenses = salesRows.value
     .filter((row) => row.report_date !== todayIso.value)
     .map((row) => Number(row.expenses))
-  const averagePastExpenses = previousExpenses.length > 0
-    ? previousExpenses.reduce((sum, value) => sum + value, 0) / previousExpenses.length
-    : 0
+  const averagePastExpenses =
+    previousExpenses.length > 0
+      ? previousExpenses.reduce((sum, value) => sum + value, 0) /
+        previousExpenses.length
+      : 0
   const difference = Math.abs(Number(cashSummary.value.difference ?? '0'))
 
   if (cashSummary.value.difference !== null && difference > 0) {
     nextAlerts.push({
-      title: difference > 10 ? 'Divergencia relevante no caixa' : 'Pequena divergencia no caixa',
-      text: `Diferenca de ${formatNullableCurrency(cashSummary.value.difference)} no fechamento mais recente.`,
-      badge: difference > 10 ? 'Atencao' : 'Monitorar',
+      title:
+        difference > 10
+          ? 'Divergencia relevante no caixa'
+          : 'Pequena divergencia no caixa',
+      text: `Diferença de ${formatNullableCurrency(cashSummary.value.difference)} no fechamento mais recente.`,
+      badge: difference > 10 ? 'Atenção' : 'Monitorar',
       severity: difference > 10 ? 'danger' : 'warn',
-      icon: difference > 10 ? 'pi pi-exclamation-triangle' : 'pi pi-info-circle',
-      iconTone: difference > 10 ? 'dashboard-alert-bad' : 'dashboard-alert-warn',
-      cardClass: difference > 10 ? 'dashboard-alert-card-bad' : 'dashboard-alert-card-warn'
+      icon:
+        difference > 10 ? 'pi pi-exclamation-triangle' : 'pi pi-info-circle',
+      iconTone:
+        difference > 10 ? 'dashboard-alert-bad' : 'dashboard-alert-warn',
+      cardClass:
+        difference > 10
+          ? 'dashboard-alert-card-bad'
+          : 'dashboard-alert-card-warn'
     })
   }
 
   if (averagePastExpenses > 0 && todayExpenses > averagePastExpenses * 1.1) {
-    const percent = ((todayExpenses - averagePastExpenses) / averagePastExpenses) * 100
+    const percent =
+      ((todayExpenses - averagePastExpenses) / averagePastExpenses) * 100
     nextAlerts.push({
-      title: 'Despesa acima da media',
-      text: `Despesas de hoje estao ${percent.toFixed(1).replace('.', ',')}% acima da media dos ultimos dias.`,
-      badge: 'Informacao',
+      title: 'Despesa acima da média',
+      text: `Despesas de hoje estão ${percent.toFixed(1).replace('.', ',')}% acima da média dos últimos dias.`,
+      badge: 'Informação',
       severity: 'info',
       icon: 'pi pi-info-circle',
       iconTone: 'dashboard-alert-info',
@@ -619,7 +763,7 @@ const alerts = computed<DashboardAlert[]>(() => {
 
   if (nextAlerts.length === 0) {
     nextAlerts.push({
-      title: 'Operacao estavel',
+      title: 'Operação estável',
       text: 'Sem alertas operacionais fortes no momento.',
       badge: 'Ok',
       severity: 'success',
@@ -646,21 +790,26 @@ const quickSummaryItems = computed(() => [
   {
     label: 'Resultado estimado',
     value: formatCurrency(summary.value?.profit_estimate_today ?? '0'),
-    toneClass: Number(summary.value?.profit_estimate_today ?? '0') >= 0 ? 'dashboard-text-good' : 'dashboard-text-bad'
+    toneClass:
+      Number(summary.value?.profit_estimate_today ?? '0') >= 0
+        ? 'dashboard-text-good'
+        : 'dashboard-text-bad'
   },
   {
-    label: 'Vendas concluidas',
+    label: 'Vendas concluídas',
     value: String(summary.value?.sales_count_today ?? 0),
     toneClass: ''
   },
   {
-    label: 'Ticket medio',
+    label: 'Ticket médio',
     value: formatCurrency(summary.value?.average_ticket_today ?? '0'),
     toneClass: ''
   },
   {
-    label: 'Ultimo fechamento',
-    value: lastClosedSession.value?.closed_at ? formatDateTime(lastClosedSession.value.closed_at) : 'Sem fechamento',
+    label: 'Último fechamento',
+    value: lastClosedSession.value?.closed_at
+      ? formatDateTime(lastClosedSession.value.closed_at)
+      : 'Sem fechamento',
     toneClass: ''
   }
 ])
@@ -675,7 +824,9 @@ const paymentLegend = computed(() =>
 )
 
 const hourlyChartData = computed<ChartData<'bar'>>(() => ({
-  labels: displayHourlyPoints.value.map((point) => `${point.hour.slice(0, 2)}h`),
+  labels: displayHourlyPoints.value.map(
+    (point) => `${point.hour.slice(0, 2)}h`
+  ),
   datasets: [
     {
       label: 'Receita',
@@ -695,14 +846,18 @@ const hourlyChartOptions = computed<ChartOptions<'bar'>>(() => ({
     legend: { display: false },
     tooltip: {
       callbacks: {
-        label: (context) => ` ${currencyFormatter.format(Number(context.raw ?? 0))}`
+        label: (context) =>
+          ` ${currencyFormatter.format(Number(context.raw ?? 0))}`
       }
     }
   },
   scales: {
     x: {
       grid: { display: false },
-      ticks: { color: dashboardPalette.zinc, font: { size: 10, weight: 'bold' } },
+      ticks: {
+        color: dashboardPalette.zinc,
+        font: { size: 10, weight: 'bold' }
+      },
       border: { display: false }
     },
     y: {
@@ -719,11 +874,15 @@ const hourlyChartOptions = computed<ChartOptions<'bar'>>(() => ({
 }))
 
 const weeklyRevenueChartData = computed<ChartData<'line'>>(() => ({
-  labels: (summary.value?.revenue_last_7_days ?? []).map((point) => formatDayShort(point.report_date)),
+  labels: (summary.value?.revenue_last_7_days ?? []).map((point) =>
+    formatDayShort(point.report_date)
+  ),
   datasets: [
     {
       label: 'Receita',
-      data: (summary.value?.revenue_last_7_days ?? []).map((point) => Number(point.revenue)),
+      data: (summary.value?.revenue_last_7_days ?? []).map((point) =>
+        Number(point.revenue)
+      ),
       borderColor: dashboardPalette.emerald,
       backgroundColor: dashboardPalette.emeraldSoft,
       fill: true,
@@ -744,14 +903,18 @@ const weeklyRevenueChartOptions = computed<ChartOptions<'line'>>(() => ({
     legend: { display: false },
     tooltip: {
       callbacks: {
-        label: (context) => ` ${currencyFormatter.format(Number(context.raw ?? 0))}`
+        label: (context) =>
+          ` ${currencyFormatter.format(Number(context.raw ?? 0))}`
       }
     }
   },
   scales: {
     x: {
       grid: { display: false },
-      ticks: { color: dashboardPalette.zinc, font: { size: 10, weight: 'bold' } },
+      ticks: {
+        color: dashboardPalette.zinc,
+        font: { size: 10, weight: 'bold' }
+      },
       border: { display: false }
     },
     y: {
@@ -768,11 +931,15 @@ const weeklyRevenueChartOptions = computed<ChartOptions<'line'>>(() => ({
 }))
 
 const paymentChartData = computed<ChartData<'doughnut'>>(() => ({
-  labels: paymentReport.value.map((item) => paymentMethodLabel(item.payment_method)),
+  labels: paymentReport.value.map((item) =>
+    paymentMethodLabel(item.payment_method)
+  ),
   datasets: [
     {
       data: paymentReport.value.map((item) => Number(item.revenue)),
-      backgroundColor: paymentReport.value.map((item) => paymentColors[item.payment_method]),
+      backgroundColor: paymentReport.value.map(
+        (item) => paymentColors[item.payment_method]
+      ),
       borderWidth: 0,
       hoverOffset: 2
     }
@@ -789,7 +956,10 @@ const paymentChartOptions = computed<ChartOptions<'doughnut'>>(() => ({
       callbacks: {
         label: (context) => {
           const value = Number(context.raw ?? 0)
-          const total = paymentReport.value.reduce((sum, item) => sum + Number(item.revenue), 0)
+          const total = paymentReport.value.reduce(
+            (sum, item) => sum + Number(item.revenue),
+            0
+          )
           const share = total > 0 ? (value / total) * 100 : 0
           return ` ${currencyFormatter.format(value)} (${share.toFixed(1)}%)`
         }
@@ -881,12 +1051,14 @@ function deltaIconReversed(current: number, previous: number): string {
   return 'pi pi-minus'
 }
 
-function paymentMethodLabel(value: PaymentMethodReportRow['payment_method']): string {
+function paymentMethodLabel(
+  value: PaymentMethodReportRow['payment_method']
+): string {
   return {
     CASH: 'Dinheiro',
     PIX: 'PIX',
-    DEBIT_CARD: 'Cartao Debito',
-    CREDIT_CARD: 'Cartao Credito',
+    DEBIT_CARD: 'Cartão Débito',
+    CREDIT_CARD: 'Cartão Crédito',
     MIXED: 'Misto'
   }[value]
 }
@@ -918,7 +1090,13 @@ async function loadDashboard(): Promise<void> {
   try {
     const today = todayDate()
     const sevenDaysAgo = shiftDate(today, -6)
-    const [dashboardSummary, payments, salesHistory, currentCashSession, historySessions] = await Promise.all([
+    const [
+      dashboardSummary,
+      payments,
+      salesHistory,
+      currentCashSession,
+      historySessions
+    ] = await Promise.all([
       getDashboardSummary(),
       listPaymentMethodReport({ start_date: today, end_date: today }),
       listSalesReport({ start_date: sevenDaysAgo, end_date: today }),
@@ -929,10 +1107,16 @@ async function loadDashboard(): Promise<void> {
     summary.value = dashboardSummary
     paymentReport.value = payments
     salesRows.value = salesHistory
-    currentSession.value = currentCashSession?.status === 'OPEN' ? currentCashSession : null
-    lastClosedSession.value = historySessions.find((session) => session.status === 'CLOSED') ?? getLastClosedSession()
+    currentSession.value =
+      currentCashSession?.status === 'OPEN' ? currentCashSession : null
+    lastClosedSession.value =
+      historySessions.find((session) => session.status === 'CLOSED') ??
+      getLastClosedSession()
   } catch (error) {
-    errorMessage.value = readError(error, 'Nao foi possivel carregar o dashboard.')
+    errorMessage.value = readError(
+      error,
+      'Não foi possível carregar o dashboard.'
+    )
     showErrorDialog.value = true
   } finally {
     isLoading.value = false
@@ -942,7 +1126,9 @@ async function loadDashboard(): Promise<void> {
 watchEffect(() => {
   setTopbar({
     badge: {
-      value: summary.value ? `Hoje, ${formatDay(summary.value.report_date)}` : 'Hoje',
+      value: summary.value
+        ? `Hoje, ${formatDay(summary.value.report_date)}`
+        : 'Hoje',
       severity: 'secondary'
     },
     actions: [
@@ -1199,11 +1385,23 @@ onBeforeUnmount(() => {
 }
 
 .dashboard-progress-warn :deep(.p-progressbar-value) {
-  background: linear-gradient(90deg, #16a34a 0%, #16a34a 82%, #f59e0b 82%, #f59e0b 100%);
+  background: linear-gradient(
+    90deg,
+    #16a34a 0%,
+    #16a34a 82%,
+    #f59e0b 82%,
+    #f59e0b 100%
+  );
 }
 
 .dashboard-progress-bad :deep(.p-progressbar-value) {
-  background: linear-gradient(90deg, #16a34a 0%, #16a34a 68%, #ef4444 68%, #ef4444 100%);
+  background: linear-gradient(
+    90deg,
+    #16a34a 0%,
+    #16a34a 68%,
+    #ef4444 68%,
+    #ef4444 100%
+  );
 }
 
 .dashboard-progress-neutral :deep(.p-progressbar-value) {

@@ -6,11 +6,19 @@ __pycache__/
 *.pyc
 *.sqlite3
 *.db
+.coverage
+coverage.xml
+htmlcov/
 
-backend/.env
+backend/.env*
+!backend/.env.example
 backend/.venv/
+backend/logs/
+backend/media/
 
-frontend/.env
+frontend/.env*
+!frontend/.env.example
+frontend/coverage/
 frontend/dist/
 frontend/node_modules/
 .release/

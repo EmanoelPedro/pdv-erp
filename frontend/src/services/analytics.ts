@@ -44,30 +44,58 @@ export async function getDashboardSummary(): Promise<DashboardSummary> {
   return apiGet<DashboardSummary>('/api/v1/dashboard/summary')
 }
 
-export async function listSalesReport(filters?: ReportFilters): Promise<SalesSummaryRow[]> {
-  return apiGet<SalesSummaryRow[]>(`/api/v1/reports/sales${buildQuery(filters)}`)
+export async function listSalesReport(
+  filters?: ReportFilters
+): Promise<SalesSummaryRow[]> {
+  return apiGet<SalesSummaryRow[]>(
+    `/api/v1/reports/sales${buildQuery(filters)}`
+  )
 }
 
-export async function listProductReport(filters?: ReportFilters): Promise<ProductPerformanceRow[]> {
-  return apiGet<ProductPerformanceRow[]>(`/api/v1/reports/products${buildQuery(filters)}`)
+export async function listProductReport(
+  filters?: ReportFilters
+): Promise<ProductPerformanceRow[]> {
+  return apiGet<ProductPerformanceRow[]>(
+    `/api/v1/reports/products${buildQuery(filters)}`
+  )
 }
 
-export async function listCategoryReport(filters?: ReportFilters): Promise<CategoryPerformanceRow[]> {
-  return apiGet<CategoryPerformanceRow[]>(`/api/v1/reports/categories${buildQuery(filters)}`)
+export async function listCategoryReport(
+  filters?: ReportFilters
+): Promise<CategoryPerformanceRow[]> {
+  return apiGet<CategoryPerformanceRow[]>(
+    `/api/v1/reports/categories${buildQuery(filters)}`
+  )
 }
 
-export async function listPaymentMethodReport(filters?: ReportFilters): Promise<PaymentMethodReportRow[]> {
-  return apiGet<PaymentMethodReportRow[]>(`/api/v1/reports/payments${buildQuery(filters)}`)
+export async function listPaymentMethodReport(
+  filters?: ReportFilters
+): Promise<PaymentMethodReportRow[]> {
+  return apiGet<PaymentMethodReportRow[]>(
+    `/api/v1/reports/payments${buildQuery(filters)}`
+  )
 }
 
-export async function listHourlySalesReport(filters?: ReportFilters): Promise<HourlySalesRow[]> {
-  return apiGet<HourlySalesRow[]>(`/api/v1/reports/hourly-sales${buildQuery(filters)}`)
+export async function listHourlySalesReport(
+  filters?: ReportFilters
+): Promise<HourlySalesRow[]> {
+  return apiGet<HourlySalesRow[]>(
+    `/api/v1/reports/hourly-sales${buildQuery(filters)}`
+  )
 }
 
-export async function listCashRegisterReport(filters?: ReportFilters): Promise<CashRegisterReportRow[]> {
-  return apiGet<CashRegisterReportRow[]>(`/api/v1/reports/cash-registers${buildQuery(filters)}`)
+export async function listCashRegisterReport(
+  filters?: ReportFilters
+): Promise<CashRegisterReportRow[]> {
+  return apiGet<CashRegisterReportRow[]>(
+    `/api/v1/reports/cash-registers${buildQuery(filters)}`
+  )
 }
 
-export async function listExpenseAnalysisReport(filters?: ReportFilters): Promise<ExpenseAnalysisRow[]> {
-  return apiGet<ExpenseAnalysisRow[]>(`/api/v1/reports/expenses${buildQuery(filters)}`)
+export async function listExpenseAnalysisReport(
+  filters?: ReportFilters
+): Promise<ExpenseAnalysisRow[]> {
+  return apiGet<ExpenseAnalysisRow[]>(
+    `/api/v1/reports/expenses${buildQuery(filters)}`
+  )
 }

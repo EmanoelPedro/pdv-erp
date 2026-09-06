@@ -21,14 +21,11 @@ class Settings(BaseSettings):
         "https://tauri.localhost",
         "tauri://localhost",
     ]
-    owner_action_pin: str = "1234"
     auth_session_days: int = 30
     media_dir: str = "media"
     max_product_image_size_bytes: int = 5_000_000
 
-    model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", extra="ignore"
-    )
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @property
     def resolved_data_dir(self) -> Path | None:

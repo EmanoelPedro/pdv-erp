@@ -1,20 +1,37 @@
-export const PRODUCT_SHORTCUT_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='] as const
+export const PRODUCT_SHORTCUT_KEYS = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '0',
+  '-',
+  '='
+] as const
 
 export const POS_SHORTCUTS = [
   { key: 'F2', label: 'Atalhos' },
   { key: 'F3', label: 'Buscar produto' },
   { key: 'F5', label: 'Limpar carrinho' },
   { key: 'F6', label: 'Cancelar item' },
-  { key: 'F7', label: 'Desconto' },
-  { key: 'F8', label: 'Observacao' },
-  { key: 'F9', label: 'Cliente' },
   { key: 'F10', label: 'Confirmar venda' },
-  { key: 'F11', label: 'Mais opcoes' },
+  { key: 'F11', label: 'Mais opções' },
   { key: 'F12', label: 'Fechar caixa' },
-  { key: '1-0 - =', label: 'Adicionar produto visivel' }
+  { key: '1-0 - =', label: 'Adicionar produto visível' }
 ] as const
 
-type VisualKey = 'pasteis' | 'bebidas' | 'salgados' | 'lanches' | 'pizzas' | 'outros' | 'todos'
+type VisualKey =
+  | 'pasteis'
+  | 'bebidas'
+  | 'salgados'
+  | 'lanches'
+  | 'pizzas'
+  | 'outros'
+  | 'todos'
 
 interface VisualConfig {
   icon: string
@@ -60,7 +77,14 @@ const VISUALS: Record<VisualKey, VisualConfig> = {
   }
 }
 
-const CATEGORY_ORDER: VisualKey[] = ['pasteis', 'bebidas', 'salgados', 'lanches', 'pizzas', 'outros']
+const CATEGORY_ORDER: VisualKey[] = [
+  'pasteis',
+  'bebidas',
+  'salgados',
+  'lanches',
+  'pizzas',
+  'outros'
+]
 
 function normalize(value: string | undefined | null): string {
   return (value ?? '')
@@ -74,7 +98,10 @@ function includesAny(value: string, words: string[]): boolean {
   return words.some((word) => value.includes(word))
 }
 
-export function resolveVisualKey(categoryName?: string, productName?: string): VisualKey {
+export function resolveVisualKey(
+  categoryName?: string,
+  productName?: string
+): VisualKey {
   const text = `${normalize(categoryName)} ${normalize(productName)}`
 
   if (includesAny(text, ['todo', 'todos'])) {
@@ -84,13 +111,42 @@ export function resolveVisualKey(categoryName?: string, productName?: string): V
   if (includesAny(text, ['pastel', 'pasteis'])) {
     return 'pasteis'
   }
-  if (includesAny(text, ['bebida', 'refrigerante', 'suco', 'agua', 'cafe', 'caldo', 'cana'])) {
+  if (
+    includesAny(text, [
+      'bebida',
+      'refrigerante',
+      'suco',
+      'agua',
+      'cafe',
+      'caldo',
+      'cana'
+    ])
+  ) {
     return 'bebidas'
   }
-  if (includesAny(text, ['salgado', 'coxinha', 'bolinha', 'kibe', 'croquete', 'enrolado'])) {
+  if (
+    includesAny(text, [
+      'salgado',
+      'coxinha',
+      'bolinha',
+      'kibe',
+      'croquete',
+      'enrolado'
+    ])
+  ) {
     return 'salgados'
   }
-  if (includesAny(text, ['lanche', 'burger', 'burguer', 'x-b', 'x-', 'sanduiche', 'sanduich'])) {
+  if (
+    includesAny(text, [
+      'lanche',
+      'burger',
+      'burguer',
+      'x-b',
+      'x-',
+      'sanduiche',
+      'sanduich'
+    ])
+  ) {
     return 'lanches'
   }
   if (includesAny(text, ['pizza', 'broto'])) {
@@ -100,7 +156,10 @@ export function resolveVisualKey(categoryName?: string, productName?: string): V
   return 'outros'
 }
 
-export function resolveProductVisual(categoryName?: string, productName?: string): VisualConfig {
+export function resolveProductVisual(
+  categoryName?: string,
+  productName?: string
+): VisualConfig {
   return VISUALS[resolveVisualKey(categoryName, productName)]
 }
 
@@ -108,7 +167,9 @@ export function resolveCategoryVisual(categoryName: string): VisualConfig {
   return VISUALS[resolveVisualKey(categoryName)]
 }
 
-export function sortCategoriesForPos<T extends { name: string }>(categories: T[]): T[] {
+export function sortCategoriesForPos<T extends { name: string }>(
+  categories: T[]
+): T[] {
   return [...categories].sort((left, right) => {
     const leftKey = resolveVisualKey(left.name)
     const rightKey = resolveVisualKey(right.name)

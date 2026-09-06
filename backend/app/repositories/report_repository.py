@@ -14,7 +14,6 @@ from app.database.models import (
     SaleModel,
 )
 from app.domain.cash_register import CashRegisterStatus
-from app.domain.expense import ExpenseCategory
 from app.domain.sale import PaymentMethod, SaleStatus
 
 
@@ -34,8 +33,7 @@ class ReportRepository:
 
     def get_sales_overview(self, filters: ReportFilters) -> dict[str, object]:
         statement = select(
-            func.coalesce(func.sum(SaleModel.total_amount),
-                          0).label("sales_amount"),
+            func.coalesce(func.sum(SaleModel.total_amount), 0).label("sales_amount"),
             func.count(SaleModel.id).label("sales_count"),
         ).select_from(SaleModel)
         statement = self._apply_sale_filters(statement, filters)
@@ -43,8 +41,7 @@ class ReportRepository:
 
     def get_expenses_overview(self, filters: ReportFilters) -> dict[str, object]:
         statement = select(
-            func.coalesce(func.sum(ExpenseModel.amount),
-                          0).label("expenses_amount"),
+            func.coalesce(func.sum(ExpenseModel.amount), 0).label("expenses_amount"),
             func.count(ExpenseModel.id).label("expenses_count"),
         ).select_from(ExpenseModel)
         statement = self._apply_expense_filters(statement, filters)
@@ -54,8 +51,7 @@ class ReportRepository:
         statement = (
             select(
                 CashRegisterSessionModel.id.label("session_id"),
-                CashRegisterSessionModel.difference_amount.label(
-                    "difference_amount"),
+                CashRegisterSessionModel.difference_amount.label("difference_amount"),
                 CashRegisterSessionModel.closed_at.label("closed_at"),
             )
             .where(CashRegisterSessionModel.status == CashRegisterStatus.CLOSED.value)
@@ -71,14 +67,15 @@ class ReportRepository:
                 ProductModel.id.label("product_id"),
                 ProductModel.name.label("product_name"),
                 func.sum(SaleItemModel.quantity).label("quantity_sold"),
-                func.coalesce(func.sum(SaleItemModel.total_price),
-                              0).label("revenue"),
+                func.coalesce(func.sum(SaleItemModel.total_price), 0).label("revenue"),
             )
             .select_from(SaleItemModel)
             .join(SaleModel, SaleModel.id == SaleItemModel.sale_id)
             .join(ProductModel, ProductModel.id == SaleItemModel.product_id)
             .group_by(ProductModel.id, ProductModel.name)
-            .order_by(func.sum(SaleItemModel.quantity).desc(), func.sum(SaleItemModel.total_price).desc())
+            .order_by(
+                func.sum(SaleItemModel.quantity).desc(), func.sum(SaleItemModel.total_price).desc()
+            )
             .limit(1)
         )
         statement = self._apply_item_sale_filters(statement, filters)
@@ -90,17 +87,17 @@ class ReportRepository:
             select(
                 CategoryModel.id.label("category_id"),
                 CategoryModel.name.label("category_name"),
-                func.coalesce(func.sum(SaleItemModel.total_price),
-                              0).label("revenue"),
-                func.coalesce(func.sum(SaleItemModel.quantity),
-                              0).label("units_sold"),
+                func.coalesce(func.sum(SaleItemModel.total_price), 0).label("revenue"),
+                func.coalesce(func.sum(SaleItemModel.quantity), 0).label("units_sold"),
             )
             .select_from(SaleItemModel)
             .join(SaleModel, SaleModel.id == SaleItemModel.sale_id)
             .join(ProductModel, ProductModel.id == SaleItemModel.product_id)
             .join(CategoryModel, CategoryModel.id == ProductModel.category_id)
             .group_by(CategoryModel.id, CategoryModel.name)
-            .order_by(func.sum(SaleItemModel.total_price).desc(), func.sum(SaleItemModel.quantity).desc())
+            .order_by(
+                func.sum(SaleItemModel.total_price).desc(), func.sum(SaleItemModel.quantity).desc()
+            )
             .limit(1)
         )
         statement = self._apply_item_sale_filters(statement, filters)
@@ -111,8 +108,7 @@ class ReportRepository:
         statement = (
             select(
                 func.date(SaleModel.created_at).label("report_date"),
-                func.coalesce(func.sum(SaleModel.total_amount),
-                              0).label("revenue"),
+                func.coalesce(func.sum(SaleModel.total_amount), 0).label("revenue"),
             )
             .select_from(SaleModel)
             .group_by(func.date(SaleModel.created_at))
@@ -127,8 +123,7 @@ class ReportRepository:
             select(
                 hour_label.label("hour"),
                 func.count(SaleModel.id).label("sales_count"),
-                func.coalesce(func.sum(SaleModel.total_amount),
-                              0).label("revenue"),
+                func.coalesce(func.sum(SaleModel.total_amount), 0).label("revenue"),
             )
             .select_from(SaleModel)
             .group_by(hour_label)
@@ -143,8 +138,7 @@ class ReportRepository:
             select(
                 report_date.label("report_date"),
                 func.count(SaleModel.id).label("sales_count"),
-                func.coalesce(func.sum(SaleModel.total_amount),
-                              0).label("gross_sales"),
+                func.coalesce(func.sum(SaleModel.total_amount), 0).label("gross_sales"),
             )
             .select_from(SaleModel)
             .group_by(report_date)
@@ -158,8 +152,7 @@ class ReportRepository:
         statement = (
             select(
                 report_date.label("report_date"),
-                func.coalesce(func.sum(ExpenseModel.amount),
-                              0).label("expenses_amount"),
+                func.coalesce(func.sum(ExpenseModel.amount), 0).label("expenses_amount"),
             )
             .select_from(ExpenseModel)
             .group_by(report_date)
@@ -173,18 +166,17 @@ class ReportRepository:
             select(
                 ProductModel.id.label("product_id"),
                 ProductModel.name.label("product_name"),
-                func.coalesce(func.sum(SaleItemModel.quantity),
-                              0).label("quantity_sold"),
-                func.coalesce(func.sum(SaleItemModel.total_price),
-                              0).label("revenue"),
-                func.count(func.distinct(SaleModel.id)).label(
-                    "sales_with_product"),
+                func.coalesce(func.sum(SaleItemModel.quantity), 0).label("quantity_sold"),
+                func.coalesce(func.sum(SaleItemModel.total_price), 0).label("revenue"),
+                func.count(func.distinct(SaleModel.id)).label("sales_with_product"),
             )
             .select_from(SaleItemModel)
             .join(SaleModel, SaleModel.id == SaleItemModel.sale_id)
             .join(ProductModel, ProductModel.id == SaleItemModel.product_id)
             .group_by(ProductModel.id, ProductModel.name)
-            .order_by(func.sum(SaleItemModel.quantity).desc(), func.sum(SaleItemModel.total_price).desc())
+            .order_by(
+                func.sum(SaleItemModel.quantity).desc(), func.sum(SaleItemModel.total_price).desc()
+            )
         )
         statement = self._apply_item_sale_filters(statement, filters)
         return [dict(row) for row in self.db.execute(statement).mappings().all()]
@@ -194,17 +186,17 @@ class ReportRepository:
             select(
                 CategoryModel.id.label("category_id"),
                 CategoryModel.name.label("category_name"),
-                func.coalesce(func.sum(SaleItemModel.total_price),
-                              0).label("revenue"),
-                func.coalesce(func.sum(SaleItemModel.quantity),
-                              0).label("units_sold"),
+                func.coalesce(func.sum(SaleItemModel.total_price), 0).label("revenue"),
+                func.coalesce(func.sum(SaleItemModel.quantity), 0).label("units_sold"),
             )
             .select_from(SaleItemModel)
             .join(SaleModel, SaleModel.id == SaleItemModel.sale_id)
             .join(ProductModel, ProductModel.id == SaleItemModel.product_id)
             .join(CategoryModel, CategoryModel.id == ProductModel.category_id)
             .group_by(CategoryModel.id, CategoryModel.name)
-            .order_by(func.sum(SaleItemModel.total_price).desc(), func.sum(SaleItemModel.quantity).desc())
+            .order_by(
+                func.sum(SaleItemModel.total_price).desc(), func.sum(SaleItemModel.quantity).desc()
+            )
         )
         statement = self._apply_item_sale_filters(statement, filters)
         return [dict(row) for row in self.db.execute(statement).mappings().all()]
@@ -214,8 +206,7 @@ class ReportRepository:
             select(
                 SaleModel.payment_method.label("payment_method"),
                 func.count(SaleModel.id).label("transactions"),
-                func.coalesce(func.sum(SaleModel.total_amount),
-                              0).label("revenue"),
+                func.coalesce(func.sum(SaleModel.total_amount), 0).label("revenue"),
             )
             .select_from(SaleModel)
             .group_by(SaleModel.payment_method)
@@ -229,8 +220,7 @@ class ReportRepository:
             select(
                 ExpenseModel.category.label("category"),
                 func.count(ExpenseModel.id).label("count"),
-                func.coalesce(func.sum(ExpenseModel.amount),
-                              0).label("amount"),
+                func.coalesce(func.sum(ExpenseModel.amount), 0).label("amount"),
             )
             .select_from(ExpenseModel)
             .group_by(ExpenseModel.category)
@@ -239,21 +229,22 @@ class ReportRepository:
         statement = self._apply_expense_filters(statement, filters)
         return [dict(row) for row in self.db.execute(statement).mappings().all()]
 
-    def _apply_sale_filters(self, statement: Select[tuple], filters: ReportFilters) -> Select[tuple]:
-        statement = statement.where(
-            SaleModel.status == SaleStatus.COMPLETED.value)
+    def _apply_sale_filters(
+        self, statement: Select[tuple], filters: ReportFilters
+    ) -> Select[tuple]:
+        statement = statement.where(SaleModel.status == SaleStatus.COMPLETED.value)
         statement = self._apply_date_range(
-            statement, SaleModel.created_at, filters.start_date, filters.end_date)
+            statement, SaleModel.created_at, filters.start_date, filters.end_date
+        )
 
         if filters.payment_method is not None:
-            statement = statement.where(
-                SaleModel.payment_method == filters.payment_method.value)
+            statement = statement.where(SaleModel.payment_method == filters.payment_method.value)
         if filters.user_id is not None:
-            statement = statement.where(
-                SaleModel.seller_user_id == str(filters.user_id))
+            statement = statement.where(SaleModel.seller_user_id == str(filters.user_id))
         if filters.cash_register_session_id is not None:
             statement = statement.where(
-                SaleModel.cash_register_session_id == str(filters.cash_register_session_id))
+                SaleModel.cash_register_session_id == str(filters.cash_register_session_id)
+            )
         if filters.category_id is not None:
             category_sales = (
                 select(SaleItemModel.sale_id)
@@ -264,40 +255,42 @@ class ReportRepository:
 
         return statement
 
-    def _apply_item_sale_filters(self, statement: Select[tuple], filters: ReportFilters) -> Select[tuple]:
-        statement = statement.where(
-            SaleModel.status == SaleStatus.COMPLETED.value)
+    def _apply_item_sale_filters(
+        self, statement: Select[tuple], filters: ReportFilters
+    ) -> Select[tuple]:
+        statement = statement.where(SaleModel.status == SaleStatus.COMPLETED.value)
         statement = self._apply_date_range(
-            statement, SaleModel.created_at, filters.start_date, filters.end_date)
+            statement, SaleModel.created_at, filters.start_date, filters.end_date
+        )
 
         if filters.payment_method is not None:
-            statement = statement.where(
-                SaleModel.payment_method == filters.payment_method.value)
+            statement = statement.where(SaleModel.payment_method == filters.payment_method.value)
         if filters.user_id is not None:
-            statement = statement.where(
-                SaleModel.seller_user_id == str(filters.user_id))
+            statement = statement.where(SaleModel.seller_user_id == str(filters.user_id))
         if filters.cash_register_session_id is not None:
             statement = statement.where(
-                SaleModel.cash_register_session_id == str(filters.cash_register_session_id))
+                SaleModel.cash_register_session_id == str(filters.cash_register_session_id)
+            )
         if filters.category_id is not None:
-            statement = statement.where(
-                ProductModel.category_id == str(filters.category_id))
+            statement = statement.where(ProductModel.category_id == str(filters.category_id))
 
         return statement
 
-    def _apply_expense_filters(self, statement: Select[tuple], filters: ReportFilters) -> Select[tuple]:
+    def _apply_expense_filters(
+        self, statement: Select[tuple], filters: ReportFilters
+    ) -> Select[tuple]:
         statement = self._apply_date_range(
-            statement, ExpenseModel.expense_date, filters.start_date, filters.end_date)
+            statement, ExpenseModel.expense_date, filters.start_date, filters.end_date
+        )
 
         if filters.payment_method is not None:
-            statement = statement.where(
-                ExpenseModel.payment_method == filters.payment_method.value)
+            statement = statement.where(ExpenseModel.payment_method == filters.payment_method.value)
         if filters.user_id is not None:
-            statement = statement.where(
-                ExpenseModel.created_by_user_id == str(filters.user_id))
+            statement = statement.where(ExpenseModel.created_by_user_id == str(filters.user_id))
         if filters.cash_register_session_id is not None:
             statement = statement.where(
-                ExpenseModel.cash_register_session_id == str(filters.cash_register_session_id))
+                ExpenseModel.cash_register_session_id == str(filters.cash_register_session_id)
+            )
 
         return statement
 
@@ -312,7 +305,6 @@ class ReportRepository:
             started_at = datetime.combine(start_date, time.min, tzinfo=UTC)
             statement = statement.where(column >= started_at)
         if end_date is not None:
-            ended_at = datetime.combine(
-                end_date + timedelta(days=1), time.min, tzinfo=UTC)
+            ended_at = datetime.combine(end_date + timedelta(days=1), time.min, tzinfo=UTC)
             statement = statement.where(column < ended_at)
         return statement

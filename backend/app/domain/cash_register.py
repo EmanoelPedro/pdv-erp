@@ -60,8 +60,7 @@ class CashRegisterSession:
 
         occurred_at = ensure_utc(closed_at or utc_now())
         normalized_closing = normalize_money(closing_amount)
-        difference_amount = normalize_money(
-            normalized_closing - self.expected_amount)
+        difference_amount = normalize_money(normalized_closing - self.expected_amount)
 
         return replace(
             self,
@@ -87,7 +86,6 @@ class CashRegisterSession:
 
         return replace(
             self,
-            expected_amount=normalize_money(
-                self.expected_amount + normalized_cash),
+            expected_amount=normalize_money(self.expected_amount + normalized_cash),
             updated_at=entry_time,
         )

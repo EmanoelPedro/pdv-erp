@@ -1,6 +1,5 @@
-from uuid import UUID
-
 from datetime import UTC, date, datetime, time, timedelta
+from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -44,22 +43,18 @@ class CashRegisterSessionRepository:
 
         if start_date is not None:
             opened_from = datetime.combine(start_date, time.min, tzinfo=UTC)
-            statement = statement.where(
-                CashRegisterSessionModel.opened_at >= opened_from)
+            statement = statement.where(CashRegisterSessionModel.opened_at >= opened_from)
 
         if end_date is not None:
-            opened_to = datetime.combine(
-                end_date + timedelta(days=1), time.min, tzinfo=UTC)
-            statement = statement.where(
-                CashRegisterSessionModel.opened_at < opened_to)
+            opened_to = datetime.combine(end_date + timedelta(days=1), time.min, tzinfo=UTC)
+            statement = statement.where(CashRegisterSessionModel.opened_at < opened_to)
 
         return [model.to_domain() for model in self.db.scalars(statement)]
 
     def update(self, session: CashRegisterSession) -> CashRegisterSession:
         model = self.db.get(CashRegisterSessionModel, str(session.id))
         if model is None:
-            raise CashRegisterNotFoundError(
-                "Cash register session was not found.")
+            raise CashRegisterNotFoundError("Cash register session was not found.")
 
         model.update_from_domain(session)
         self.db.add(model)

@@ -21,7 +21,9 @@ function buildExpenseQuery(filters?: ExpenseFilters): string {
   return query ? `?${query}` : ''
 }
 
-export async function listExpenses(filters?: ExpenseFilters): Promise<Expense[]> {
+export async function listExpenses(
+  filters?: ExpenseFilters
+): Promise<Expense[]> {
   return apiGet<Expense[]>(`/api/v1/expenses${buildExpenseQuery(filters)}`)
 }
 
@@ -33,8 +35,14 @@ export async function createExpense(payload: ExpensePayload): Promise<Expense> {
   return apiPost<Expense, ExpensePayload>('/api/v1/expenses', payload)
 }
 
-export async function updateExpense(expenseId: string, payload: ExpensePayload): Promise<Expense> {
-  return apiPut<Expense, ExpensePayload>(`/api/v1/expenses/${expenseId}`, payload)
+export async function updateExpense(
+  expenseId: string,
+  payload: ExpensePayload
+): Promise<Expense> {
+  return apiPut<Expense, ExpensePayload>(
+    `/api/v1/expenses/${expenseId}`,
+    payload
+  )
 }
 
 export async function deleteExpense(expenseId: string): Promise<void> {

@@ -44,8 +44,9 @@ def expense_service(db_session: Session, auth_service: AuthService) -> ExpenseSe
 def cash_register_service(db_session: Session) -> CashRegisterService:
     return CashRegisterService(
         repository=CashRegisterSessionRepository(db_session),
-        sale_repository=__import__("app.repositories.sale_repository", fromlist=[
-                                   "SaleRepository"]).SaleRepository(db_session),
+        sale_repository=__import__(
+            "app.repositories.sale_repository", fromlist=["SaleRepository"]
+        ).SaleRepository(db_session),
         expense_repository=ExpenseRepository(db_session),
     )
 

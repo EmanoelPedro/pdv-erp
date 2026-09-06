@@ -1,15 +1,10 @@
-# Entrega Local em Linux
+# Entrega local via navegador no Linux
 
-Este projeto agora suporta um pacote local para uso em uma maquina Linux sem expor comandos de desenvolvimento para o usuario final.
+Além do aplicativo Tauri, o projeto oferece um pacote Linux simples que executa backend e frontend no navegador da máquina do usuário.
 
-## Como funciona
+## Estrutura
 
-- o backend FastAPI passa a servir o frontend buildado na mesma origem
-- cada versao fica em `releases/<versao>`
-- os dados persistentes ficam fora da versao, em `shared/`
-- a atualizacao troca apenas a release ativa e preserva banco e arquivos de midia
-
-Estrutura instalada:
+Cada versão é instalada separadamente e os dados persistentes ficam em `shared/`:
 
 ```text
 pdv-local/
@@ -29,30 +24,29 @@ pdv-local/
   stop-pdv.sh
 ```
 
+Uma atualização troca a release ativa sem sobrescrever o banco ou as imagens.
+
 ## Gerar o pacote
 
-Na maquina de desenvolvimento:
+Na raiz do repositório:
 
 ```bash
-cd /home/emanoel-pedro/projects/erp-workspace/pdv
 make local-release-build
 ```
 
-Saida gerada:
+Os arquivos são gerados em:
 
 - `.release/pdv-local-linux-<versao>/`
 - `.release/pdv-local-linux-<versao>.tar.gz`
 
-## Instalar na maquina do usuario
+## Instalar
 
-Pre requisitos da maquina alvo:
+Pré-requisitos da máquina de destino:
 
 - Linux
 - Python 3.13 ou superior
-- `python3 -m venv` funcional ou `uv` instalado na maquina
-- acesso a internet na instalacao inicial para baixar dependencias Python
-
-Passos:
+- `python3 -m venv` funcional ou `uv` instalado
+- acesso à internet na primeira instalação para baixar dependências Python
 
 ```bash
 tar -xzf pdv-local-linux-0.1.0.tar.gz
@@ -60,45 +54,27 @@ cd pdv-local-linux-0.1.0
 ./install.sh "$HOME/pdv-local"
 ```
 
-Depois disso, o usuario inicia com:
+Inicie e encerre a aplicação com:
 
 ```bash
 $HOME/pdv-local/start-pdv.sh
-```
-
-O script sobe o servidor local em `http://127.0.0.1:8000` e tenta abrir o navegador automaticamente.
-
-Para encerrar:
-
-```bash
 $HOME/pdv-local/stop-pdv.sh
 ```
 
-## Atualizar para a versao 2.0
+O servidor fica disponível em `http://127.0.0.1:8000` e o navegador é aberto automaticamente quando possível.
 
-Na nova release:
+## Atualizar
+
+Execute o script da nova versão no mesmo diretório de instalação:
 
 ```bash
-tar -xzf pdv-local-linux-2.0.0.tar.gz
-cd pdv-local-linux-2.0.0
+tar -xzf pdv-local-linux-0.2.0.tar.gz
+cd pdv-local-linux-0.2.0
 ./update.sh "$HOME/pdv-local"
 ```
 
-O update:
+O processo instala a nova release, atualiza o ambiente Python, preserva `shared/pdv.db` e `shared/media/` e reinicia o servidor caso ele já estivesse em execução.
 
-- copia a nova release para `releases/2.0.0/`
-- reinstala o backend na virtualenv local
-- aponta `current` para a nova versao
-- preserva `shared/pdv.db` e `shared/media/`
-- reinicia o servidor se ele ja estava aberto
+## Quando usar este formato
 
-## Por que esse modelo e o mais limpo aqui
-
-- o usuario final lida com dois scripts: iniciar e atualizar
-- voce nao sobrescreve dados ao trocar a versao
-- rollback e simples: basta apontar `current` para a release anterior
-- o backend e o frontend rodam juntos no mesmo endereco local
-
-## Limite atual
-
-Esse fluxo resolve bem Linux local com baixo atrito. Se voce quiser distribuicao sem depender de Python na maquina alvo, o proximo passo correto e empacotar o backend como binario nativo ou criar um instalador do sistema operacional.
+Este pacote é útil para uma instalação Linux controlada e acessada pelo navegador. Para uma distribuição autocontida e com experiência nativa, prefira os bundles Tauri descritos em [desktop-development.md](desktop-development.md).

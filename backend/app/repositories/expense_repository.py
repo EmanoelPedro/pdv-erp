@@ -41,28 +41,22 @@ class ExpenseRepository:
         category: ExpenseCategory | None = None,
         cash_register_session_id: UUID | None = None,
     ) -> list[Expense]:
-        statement = select(ExpenseModel).order_by(
-            ExpenseModel.expense_date.desc())
+        statement = select(ExpenseModel).order_by(ExpenseModel.expense_date.desc())
 
         if start_date is not None:
             occurred_from = datetime.combine(start_date, time.min, tzinfo=UTC)
-            statement = statement.where(
-                ExpenseModel.expense_date >= occurred_from)
+            statement = statement.where(ExpenseModel.expense_date >= occurred_from)
 
         if end_date is not None:
-            occurred_to = datetime.combine(
-                end_date + timedelta(days=1), time.min, tzinfo=UTC)
-            statement = statement.where(
-                ExpenseModel.expense_date < occurred_to)
+            occurred_to = datetime.combine(end_date + timedelta(days=1), time.min, tzinfo=UTC)
+            statement = statement.where(ExpenseModel.expense_date < occurred_to)
 
         if category is not None:
-            statement = statement.where(
-                ExpenseModel.category == category.value)
+            statement = statement.where(ExpenseModel.category == category.value)
 
         if cash_register_session_id is not None:
             statement = statement.where(
-                ExpenseModel.cash_register_session_id == str(
-                    cash_register_session_id),
+                ExpenseModel.cash_register_session_id == str(cash_register_session_id),
             )
 
         return [model.to_domain() for model in self.db.scalars(statement)]
@@ -93,8 +87,10 @@ class ExpenseRepository:
             func.coalesce(
                 func.sum(
                     case(
-                        (ExpenseModel.payment_method ==
-                         PaymentMethod.CASH.value, ExpenseModel.amount),
+                        (
+                            ExpenseModel.payment_method == PaymentMethod.CASH.value,
+                            ExpenseModel.amount,
+                        ),
                         else_=0,
                     ),
                 ),

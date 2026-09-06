@@ -1,70 +1,72 @@
 # Arquitetura
 
-## Objetivo
+## Visão geral
 
-Entregar uma base local-first, simples de operar e simples de manter para um sistema de PDV de loja unica.
+O PDV Local é uma aplicação local-first para uma única loja. O SQLite é a fonte de verdade e o fluxo operacional principal não depende de um serviço externo.
+
+```text
+Vue/PWA ──HTTP──┐
+                ├── FastAPI ── serviços ── repositórios ── SQLite
+Tauri ──HTTP────┘                                  └────── mídia local
+```
+
+No navegador, frontend e backend são iniciados separadamente durante o desenvolvimento. No desktop, o shell Tauri inicia o backend, escolhe uma porta local livre e entrega a URL à interface.
 
 ## Backend
 
-O backend fica em `backend/app/` e segue um modular monolith pragmatica:
+O backend em `backend/app/` é um monólito modular:
 
-- `api/`: adaptadores HTTP e versionamento em `/api/v1`
-- `core/`: configuracao e logging
-- `database/`: engine, session e base ORM
-- `domain/`: entidades e regras puras, incluindo a sessao de caixa
-- `repositories/`: acesso a dados persistidos
-- `services/`: casos de uso e invariantes de negocio
-- `schemas/`: contratos Pydantic de request e response
+- `api/`: rotas HTTP, dependências e tratamento de erros
+- `core/`: configuração e logging
+- `database/`: engine, sessões, modelos ORM e migrações
+- `domain/`: entidades e regras que não dependem de HTTP
+- `repositories/`: consultas e persistência
+- `services/`: casos de uso e transações
+- `schemas/`: contratos de entrada e saída com Pydantic
 
-Hoje a API sobe com healthchecks, migration inicial e o primeiro fluxo real de negocio: sessao de caixa.
+Os módulos cobrem autenticação, usuários, catálogo, vendas, sessões de caixa, despesas, dashboard, relatórios e fila de sincronização.
 
-### Fluxo de caixa
+### Caixa e vendas
 
-- apenas uma sessao pode ficar aberta por vez
-- o fechamento calcula `difference_amount = closing_amount - expected_amount`
-- nesta primeira etapa `expected_amount = opening_amount`
-- o fechamento exige PIN do proprietario para proteger alteracoes sensiveis
+- apenas uma sessão de caixa pode permanecer aberta
+- vendas aceitam um ou mais meios de pagamento
+- o valor esperado é `abertura + dinheiro recebido - despesas pagas em dinheiro`
+- somente o proprietário autenticado pode fechar o caixa
+- a diferença é calculada entre o valor contado e o valor esperado
+
+### Autenticação
+
+- o primeiro usuário cadastrado recebe o papel de proprietário
+- PINs são armazenados com PBKDF2, salt aleatório e comparação em tempo constante
+- tokens de sessão são aleatórios e somente seus hashes são persistidos
+- sessões expiram e podem ser revogadas pelo CLI de suporte
 
 ## Frontend
 
-O frontend fica em `frontend/src/` e organiza a interface em:
+O frontend em `frontend/src/` é organizado por páginas, componentes, serviços HTTP, stores Pinia e tipos compartilhados dentro da aplicação.
 
-- `layouts/`: casca principal da aplicacao
-- `pages/`: telas por rota
-- `router/`: navegacao
-- `services/`: cliente HTTP e integracoes
-- `stores/`: estado global com Pinia
+A tela de caixa concentra o fluxo rápido de venda. Recursos administrativos, como catálogo, usuários, despesas e relatórios, são restritos ao proprietário.
 
-Tambem inclui base PWA para instalacao e operacao offline-first sem depender de internet para o core.
+A PWA mantém os recursos estáticos em cache e possui uma fila de background sync para vendas. Ela ainda precisa alcançar a API local para consolidar os dados; não existe sincronização com uma nuvem nesta versão.
 
 ## Runtime desktop
 
-O modo desktop usa Tauri como shell nativo e preserva a fronteira HTTP entre frontend e backend:
+O Tauri preserva a fronteira HTTP e atua como supervisor do backend:
 
-- o Vue continua consumindo API HTTP normalmente
-- o shell Tauri sobe um supervisor local que inicia `python -m app.local_server`
-- o supervisor escolhe uma porta localhost livre, injeta `DATA_DIR`, `API_HOST` e `API_PORT`, e grava logs minimos no diretorio de dados da aplicacao
-- o frontend espera `/health/ready` antes de montar as rotas, evitando race condition no boot
-- o encerramento do app desktop mata o backend local de forma explicita
+- inclui o código do backend e um runtime Python dedicado no bundle
+- inicia `python -m app.local_server` em `127.0.0.1` com porta dinâmica
+- define o diretório persistente de banco, mídia e logs
+- aguarda `/health/ready` antes de montar a interface
+- encerra o processo do backend ao fechar a aplicação
 
-Isso preserva o modo web/PWA atual e adiciona um runtime desktop paralelo sem acoplar as telas ao shell nativo.
+## Sincronização futura
 
-## Fundacao offline-first
+A tabela `sync_queue` registra mutações locais em JSON com os estados `PENDING`, `SYNCED` e `FAILED`. A estrutura estabelece a fronteira para uma integração futura, mas ainda não há worker, API remota ou política de resolução de conflitos.
 
-Foi adicionada a base da `sync_queue` no backend para preparar sincronizacao futura por eventos:
+## Trade-offs
 
-- tabela `sync_queue` em SQLite via Alembic
-- modelo ORM, dominio, repositorio e servico dedicados
-- payload armazenado como JSON serializado
-- status inicial `PENDING`, com suporte a `SYNCED` e `FAILED`
-
-Ainda nao existe worker de envio, sincronizacao cloud, resolucao de conflito ou replay automatico. O objetivo aqui e apenas criar a fronteira persistente para mutacoes futuras.
-
-## Tradeoffs
-
-- `backend/` e `frontend/` na raiz para reduzir complexidade operacional
-- SQLite local como fonte da verdade
-- PWA base agora, sincronizacao cloud depois
-- Tauri desktop com supervisor local agora, empacotamento completo do runtime Python depois
-- fechamento protegido por PIN do proprietario como recorte minimo de permissao, em vez de um sistema completo de autenticacao agora
-- nada de CQRS, microservicos ou abstrações especulativas nesta fase
+- SQLite reduz a complexidade operacional e atende ao escopo de uma loja por instalação
+- o monólito modular mantém as regras explícitas sem introduzir infraestrutura distribuída
+- a fronteira HTTP permite reutilizar o frontend no navegador e no desktop
+- o runtime Python aumenta o tamanho do instalador, mas evita exigir Python na máquina do usuário desktop
+- funcionalidades fiscais, estoque avançado e sincronização em nuvem permanecem fora do escopo atual

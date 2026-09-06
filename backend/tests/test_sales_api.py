@@ -40,8 +40,7 @@ def test_cash_sale_updates_expected_amount(
 
     assert sale_response.status_code == 201
     assert sale_response.json()["sale"]["total_amount"] == "24.00"
-    assert sale_response.json(
-    )["cash_register_session"]["expected_amount"] == "44.00"
+    assert sale_response.json()["cash_register_session"]["expected_amount"] == "44.00"
 
 
 def test_sale_requires_open_cash_register(
@@ -73,8 +72,7 @@ def test_sale_requires_open_cash_register(
     )
 
     assert sale_response.status_code == 409
-    assert sale_response.json(
-    )["detail"] == "An open cash register is required to make a sale."
+    assert sale_response.json()["detail"] == "An open cash register is required to make a sale."
 
 
 def test_mixed_payment_only_updates_cash_component(
@@ -114,8 +112,7 @@ def test_mixed_payment_only_updates_cash_component(
     )
 
     assert sale_response.status_code == 201
-    assert sale_response.json(
-    )["cash_register_session"]["expected_amount"] == "60.00"
+    assert sale_response.json()["cash_register_session"]["expected_amount"] == "60.00"
     assert sale_response.json()["sale"]["cash_amount"] == "10.00"
 
 
@@ -196,10 +193,8 @@ def test_cash_register_expected_amount_subtracts_only_cash_expenses(
     assert current_response.status_code == 200
     assert current_response.json()["totals"]["cash_sales_amount"] == "700.00"
     assert current_response.json()["totals"]["pix_sales_amount"] == "400.00"
-    assert current_response.json(
-    )["totals"]["debit_card_sales_amount"] == "200.00"
-    assert current_response.json(
-    )["totals"]["cash_expenses_amount"] == "150.00"
+    assert current_response.json()["totals"]["debit_card_sales_amount"] == "200.00"
+    assert current_response.json()["totals"]["cash_expenses_amount"] == "150.00"
     assert current_response.json()["expected_amount"] == "850.00"
     assert close_response.status_code == 200
     assert close_response.json()["difference_amount"] == "0.00"

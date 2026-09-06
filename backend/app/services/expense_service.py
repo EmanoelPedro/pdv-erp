@@ -154,11 +154,9 @@ class ExpenseService:
         if cash_register_session_id is None:
             return
 
-        session = self.cash_register_repository.get_by_id(
-            cash_register_session_id)
+        session = self.cash_register_repository.get_by_id(cash_register_session_id)
         if session is None:
-            raise CashRegisterNotFoundError(
-                "Cash register session was not found.")
+            raise CashRegisterNotFoundError("Cash register session was not found.")
         if session.status == CashRegisterStatus.CLOSED:
             raise ExpenseImmutableError(
                 "Expenses linked to a closed cash register session cannot be changed.",

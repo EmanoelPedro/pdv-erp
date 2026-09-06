@@ -10,11 +10,9 @@ database_url = settings.resolved_database_url
 
 engine = create_engine(
     database_url,
-    connect_args={"check_same_thread": False} if database_url.startswith(
-        "sqlite") else {},
+    connect_args={"check_same_thread": False} if database_url.startswith("sqlite") else {},
 )
-SessionLocal = sessionmaker(
-    autocommit=False, autoflush=False, bind=engine, class_=Session)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=Session)
 
 
 def get_db() -> Generator[Session, None, None]:

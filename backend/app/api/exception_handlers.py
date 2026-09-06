@@ -46,7 +46,7 @@ async def _validation_handler(
     _: Request,
     exc: AppValidationError,
 ) -> JSONResponse:
-    return _json_error_response(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc))
+    return _json_error_response(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc))
 
 
 def register_exception_handlers(app: FastAPI) -> None:

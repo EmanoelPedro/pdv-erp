@@ -103,8 +103,7 @@ class ReportService:
 
     def list_product_performance(self, filters: ReportFilters) -> list[ProductPerformanceRow]:
         rows = self.report_repository.get_product_performance_rows(filters)
-        sales_count = int(self.report_repository.get_sales_overview(
-            filters)["sales_count"] or 0)
+        sales_count = int(self.report_repository.get_sales_overview(filters)["sales_count"] or 0)
 
         return [
             ProductPerformanceRow(
@@ -122,8 +121,7 @@ class ReportService:
 
     def list_category_performance(self, filters: ReportFilters) -> list[CategoryPerformanceRow]:
         rows = self.report_repository.get_category_performance_rows(filters)
-        total_revenue = sum(
-            (self._money(row["revenue"]) for row in rows), start=Decimal("0.00"))
+        total_revenue = sum((self._money(row["revenue"]) for row in rows), start=Decimal("0.00"))
 
         return [
             CategoryPerformanceRow(
@@ -131,24 +129,21 @@ class ReportService:
                 category_name=str(row["category_name"]),
                 revenue=self._money(row["revenue"]),
                 units_sold=int(row["units_sold"] or 0),
-                percentage_of_total=self._percentage(
-                    self._money(row["revenue"]), total_revenue),
+                percentage_of_total=self._percentage(self._money(row["revenue"]), total_revenue),
             )
             for row in rows
         ]
 
     def list_payment_methods(self, filters: ReportFilters) -> list[PaymentMethodReportRow]:
         rows = self.report_repository.get_payment_method_rows(filters)
-        total_revenue = sum(
-            (self._money(row["revenue"]) for row in rows), start=Decimal("0.00"))
+        total_revenue = sum((self._money(row["revenue"]) for row in rows), start=Decimal("0.00"))
 
         return [
             PaymentMethodReportRow(
                 payment_method=PaymentMethod(str(row["payment_method"])),
                 transactions=int(row["transactions"] or 0),
                 revenue=self._money(row["revenue"]),
-                percentage_of_total=self._percentage(
-                    self._money(row["revenue"]), total_revenue),
+                percentage_of_total=self._percentage(self._money(row["revenue"]), total_revenue),
             )
             for row in rows
         ]
@@ -164,7 +159,9 @@ class ReportService:
             for row in rows
         ]
 
-    def list_cash_register_sessions(self, filters: ReportFilters) -> list[CashRegisterSessionSnapshot]:
+    def list_cash_register_sessions(
+        self, filters: ReportFilters
+    ) -> list[CashRegisterSessionSnapshot]:
         snapshots = self.cash_register_service.list_session_snapshots(
             start_date=filters.start_date,
             end_date=filters.end_date,
@@ -179,16 +176,14 @@ class ReportService:
 
     def list_expense_analysis(self, filters: ReportFilters) -> list[ExpenseAnalysisRow]:
         rows = self.report_repository.get_expense_analysis_rows(filters)
-        total_amount = sum((self._money(row["amount"])
-                           for row in rows), start=Decimal("0.00"))
+        total_amount = sum((self._money(row["amount"]) for row in rows), start=Decimal("0.00"))
 
         return [
             ExpenseAnalysisRow(
                 category=ExpenseCategory(str(row["category"])),
                 amount=self._money(row["amount"]),
                 count=int(row["count"] or 0),
-                percentage_of_total=self._percentage(
-                    self._money(row["amount"]), total_amount),
+                percentage_of_total=self._percentage(self._money(row["amount"]), total_amount),
             )
             for row in rows
         ]

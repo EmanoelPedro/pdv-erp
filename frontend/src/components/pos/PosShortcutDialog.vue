@@ -12,7 +12,9 @@
         :key="shortcut.key"
         class="flex items-center justify-between gap-4 rounded-xl border border-zinc-200 px-4 py-3"
       >
-        <span class="text-sm font-medium text-zinc-600">{{ shortcut.label }}</span>
+        <span class="text-sm font-medium text-zinc-600">{{
+          shortcut.label
+        }}</span>
         <Tag severity="secondary" :value="shortcut.key" />
       </div>
     </div>

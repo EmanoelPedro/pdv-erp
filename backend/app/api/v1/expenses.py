@@ -36,10 +36,10 @@ def create_expense(
 def list_expenses(
     current_user: Annotated[User, Depends(get_current_user)],
     service: Annotated[ExpenseService, Depends(get_expense_service)],
-    start_date: date | None = Query(default=None),
-    end_date: date | None = Query(default=None),
-    category: ExpenseCategory | None = Query(default=None),
-    cash_register_session_id: UUID | None = Query(default=None),
+    start_date: Annotated[date | None, Query()] = None,
+    end_date: Annotated[date | None, Query()] = None,
+    category: Annotated[ExpenseCategory | None, Query()] = None,
+    cash_register_session_id: Annotated[UUID | None, Query()] = None,
 ) -> list[ExpenseResponse]:
     expenses = service.list_expenses(
         actor=current_user,

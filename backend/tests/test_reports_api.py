@@ -1,11 +1,11 @@
-from datetime import UTC, datetime, time, timedelta
+from datetime import UTC, datetime, time
 from decimal import Decimal
 
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from app.domain.catalog import Category, Product
 from app.domain.cash_register import CashRegisterSession
+from app.domain.catalog import Category, Product
 from app.domain.expense import Expense, ExpenseCategory
 from app.domain.sale import PaymentBreakdown, PaymentMethod, Sale, SaleItem
 from app.domain.shared import utc_now
@@ -26,7 +26,8 @@ def _seed_owner_report_data(db_session: Session) -> None:
     assert owner is not None
 
     category = CategoryRepository(db_session).create(
-        Category.create(name="Salgados", created_at=_at(7)))
+        Category.create(name="Salgados", created_at=_at(7))
+    )
     product = ProductRepository(db_session).create(
         Product.create(
             category_id=category.id,
@@ -37,15 +38,15 @@ def _seed_owner_report_data(db_session: Session) -> None:
     )
     cash_session_repository = CashRegisterSessionRepository(db_session)
     session = cash_session_repository.create(
-        CashRegisterSession.open(Decimal("200.00"), opened_at=_at(8)))
+        CashRegisterSession.open(Decimal("200.00"), opened_at=_at(8))
+    )
 
     sale_item = SaleItem.from_product(product, quantity=2, created_at=_at(9))
     sale = Sale.create(
         cash_register_session_id=session.id,
         seller_user_id=owner.id,
         items=(sale_item,),
-        payment=PaymentBreakdown.create(
-            PaymentMethod.CASH, sale_item.total_price),
+        payment=PaymentBreakdown.create(PaymentMethod.CASH, sale_item.total_price),
         created_at=_at(9),
     )
     SaleRepository(db_session).create(sale)
@@ -61,8 +62,7 @@ def _seed_owner_report_data(db_session: Session) -> None:
             created_at=_at(10),
         ),
     )
-    cash_session_repository.update(session.close(
-        Decimal("210.00"), closed_at=_at(18)))
+    cash_session_repository.update(session.close(Decimal("210.00"), closed_at=_at(18)))
     db_session.commit()
 
 
@@ -71,10 +71,8 @@ def test_reports_endpoints_require_owner_role(
     owner_auth_headers: dict[str, str],
     employee_auth_headers: dict[str, str],
 ) -> None:
-    dashboard_response = client.get(
-        "/api/v1/dashboard/summary", headers=employee_auth_headers)
-    sales_report_response = client.get(
-        "/api/v1/reports/sales", headers=employee_auth_headers)
+    dashboard_response = client.get("/api/v1/dashboard/summary", headers=employee_auth_headers)
+    sales_report_response = client.get("/api/v1/reports/sales", headers=employee_auth_headers)
 
     assert dashboard_response.status_code == 403
     assert sales_report_response.status_code == 403
@@ -88,8 +86,7 @@ def test_owner_can_read_dashboard_and_reports(
     _seed_owner_report_data(db_session)
     today = utc_now().date().isoformat()
 
-    dashboard_response = client.get(
-        "/api/v1/dashboard/summary", headers=owner_auth_headers)
+    dashboard_response = client.get("/api/v1/dashboard/summary", headers=owner_auth_headers)
     sales_report_response = client.get(
         f"/api/v1/reports/sales?start_date={today}&end_date={today}",
         headers=owner_auth_headers,
@@ -121,8 +118,7 @@ def test_owner_can_read_dashboard_and_reports(
     assert payments_report_response.json()[0]["revenue"] == "28.00"
 
     assert cash_register_report_response.status_code == 200
-    assert cash_register_report_response.json(
-    )[0]["totals"]["sales_amount"] == "28.00"
+    assert cash_register_report_response.json()[0]["totals"]["sales_amount"] == "28.00"
 
     assert expenses_report_response.status_code == 200
     assert expenses_report_response.json()[0]["category"] == "INGREDIENTS"

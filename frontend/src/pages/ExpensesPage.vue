@@ -7,58 +7,120 @@
       </div>
       <div class="ops-kpi-card">
         <span class="ops-kpi-label">Total filtrado</span>
-        <strong class="ops-kpi-value">{{ formatCurrency(totalExpenses) }}</strong>
+        <strong class="ops-kpi-value">{{
+          formatCurrency(totalExpenses)
+        }}</strong>
       </div>
       <div class="ops-kpi-card">
         <span class="ops-kpi-label">Saida em dinheiro</span>
-        <strong class="ops-kpi-value">{{ formatCurrency(cashExpenses) }}</strong>
+        <strong class="ops-kpi-value">{{
+          formatCurrency(cashExpenses)
+        }}</strong>
       </div>
       <div class="ops-kpi-card">
         <span class="ops-kpi-label">Sessao aberta</span>
-        <strong class="ops-kpi-value">{{ currentSession ? sessionLabel(currentSession.id) : 'Sem caixa aberto' }}</strong>
+        <strong class="ops-kpi-value">{{
+          currentSession ? sessionLabel(currentSession.id) : 'Sem caixa aberto'
+        }}</strong>
       </div>
     </div>
 
     <section class="pos-surface pos-stage-panel">
       <div class="ops-filter-grid">
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-zinc-700" for="expense-start-date">Data inicial</label>
-          <InputText id="expense-start-date" v-model="filters.start_date" type="date" />
+          <label
+            class="text-sm font-medium text-zinc-700"
+            for="expense-start-date"
+            >Data inicial</label
+          >
+          <InputText
+            id="expense-start-date"
+            v-model="filters.start_date"
+            type="date"
+          />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-zinc-700" for="expense-end-date">Data final</label>
-          <InputText id="expense-end-date" v-model="filters.end_date" type="date" />
+          <label
+            class="text-sm font-medium text-zinc-700"
+            for="expense-end-date"
+            >Data final</label
+          >
+          <InputText
+            id="expense-end-date"
+            v-model="filters.end_date"
+            type="date"
+          />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-zinc-700" for="expense-category-filter">Categoria</label>
-          <Select id="expense-category-filter" v-model="filters.category" :options="categoryFilterOptions" option-label="label" option-value="value" />
+          <label
+            class="text-sm font-medium text-zinc-700"
+            for="expense-category-filter"
+            >Categoria</label
+          >
+          <Select
+            id="expense-category-filter"
+            v-model="filters.category"
+            :options="categoryFilterOptions"
+            option-label="label"
+            option-value="value"
+          />
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-zinc-700" for="expense-session-filter">Sessao</label>
-          <Select id="expense-session-filter" v-model="filters.cash_register_session_id" :options="sessionFilterOptions" option-label="label" option-value="value" />
+          <label
+            class="text-sm font-medium text-zinc-700"
+            for="expense-session-filter"
+            >Sessao</label
+          >
+          <Select
+            id="expense-session-filter"
+            v-model="filters.cash_register_session_id"
+            :options="sessionFilterOptions"
+            option-label="label"
+            option-value="value"
+          />
         </div>
       </div>
 
       <div class="mt-4 flex flex-wrap gap-2">
         <Button label="Aplicar filtros" @click="loadExpenses" />
-        <Button label="Hoje" severity="secondary" outlined @click="applyTodayFilter" />
-        <Button label="Limpar" severity="secondary" text @click="clearFilters" />
+        <Button
+          label="Hoje"
+          severity="secondary"
+          outlined
+          @click="applyTodayFilter"
+        />
+        <Button
+          label="Limpar"
+          severity="secondary"
+          text
+          @click="clearFilters"
+        />
       </div>
     </section>
 
     <section class="pos-surface pos-stage-panel">
-      <div v-if="isLoading" class="flex min-h-[16rem] items-center justify-center">
+      <div
+        v-if="isLoading"
+        class="flex min-h-[16rem] items-center justify-center"
+      >
         <ProgressSpinner stroke-width="4" />
       </div>
 
       <div v-else class="flex flex-col gap-4">
-        <div v-if="expenses.length === 0" class="pos-empty-state !min-h-[14rem]">
+        <div
+          v-if="expenses.length === 0"
+          class="pos-empty-state !min-h-[14rem]"
+        >
           <div class="text-4xl">💸</div>
-          <div class="mt-2 text-base font-semibold text-zinc-700">Nenhuma despesa encontrada</div>
-          <div class="mt-1 text-sm text-zinc-500">Ajuste o filtro ou registre uma nova saida.</div>
+          <div class="mt-2 text-base font-semibold text-zinc-700">
+            Nenhuma despesa encontrada
+          </div>
+          <div class="mt-1 text-sm text-zinc-500">
+            Ajuste o filtro ou registre uma nova saida.
+          </div>
         </div>
 
         <DataTable v-else :value="expenses" size="small" striped-rows>
@@ -68,17 +130,27 @@
             </template>
           </Column>
 
-          <Column field="description" header="Descricao" />
+          <Column field="description" header="Descrição" />
 
           <Column header="Categoria">
             <template #body="slotProps">
-              <Tag severity="secondary" :value="categoryLabel(slotProps.data.category)" />
+              <Tag
+                severity="secondary"
+                :value="categoryLabel(slotProps.data.category)"
+              />
             </template>
           </Column>
 
           <Column header="Pagamento">
             <template #body="slotProps">
-              <Tag :severity="slotProps.data.payment_method === 'CASH' ? 'success' : 'secondary'" :value="paymentMethodLabel(slotProps.data.payment_method)" />
+              <Tag
+                :severity="
+                  slotProps.data.payment_method === 'CASH'
+                    ? 'success'
+                    : 'secondary'
+                "
+                :value="paymentMethodLabel(slotProps.data.payment_method)"
+              />
             </template>
           </Column>
 
@@ -90,15 +162,29 @@
 
           <Column header="Valor">
             <template #body="slotProps">
-              <span class="font-semibold text-zinc-950">{{ formatCurrency(slotProps.data.amount) }}</span>
+              <span class="font-semibold text-zinc-950">{{
+                formatCurrency(slotProps.data.amount)
+              }}</span>
             </template>
           </Column>
 
-          <Column header="Acoes">
+          <Column header="Ações">
             <template #body="slotProps">
               <div class="flex gap-2">
-                <Button label="Editar" size="small" severity="secondary" outlined @click="openEditDialog(slotProps.data)" />
-                <Button label="Excluir" size="small" severity="danger" text @click="confirmDelete(slotProps.data)" />
+                <Button
+                  label="Editar"
+                  size="small"
+                  severity="secondary"
+                  outlined
+                  @click="openEditDialog(slotProps.data)"
+                />
+                <Button
+                  label="Excluir"
+                  size="small"
+                  severity="danger"
+                  text
+                  @click="confirmDelete(slotProps.data)"
+                />
               </div>
             </template>
           </Column>
@@ -106,68 +192,176 @@
       </div>
     </section>
 
-    <Dialog v-model:visible="showFormDialog" modal :header="editingExpenseId ? 'Editar despesa' : 'Nova despesa'" :style="{ width: '40rem', maxWidth: '95vw' }">
+    <Dialog
+      v-model:visible="showFormDialog"
+      modal
+      :header="editingExpenseId ? 'Editar despesa' : 'Nova despesa'"
+      :style="{ width: '40rem', maxWidth: '95vw' }"
+    >
       <form class="flex flex-col gap-4" @submit.prevent="submitExpense">
         <div class="grid gap-4 md:grid-cols-2">
           <div class="flex flex-col gap-2 md:col-span-2">
-            <label class="text-sm font-medium text-zinc-700" for="expense-description">Descricao</label>
-            <InputText id="expense-description" v-model="form.description" placeholder="Ex.: Compra de embalagem" />
+            <label
+              class="text-sm font-medium text-zinc-700"
+              for="expense-description"
+              >Descrição</label
+            >
+            <InputText
+              id="expense-description"
+              v-model="form.description"
+              placeholder="Ex.: Compra de embalagem"
+            />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-zinc-700" for="expense-amount">Valor</label>
-            <InputText id="expense-amount" v-model="form.amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" />
+            <label
+              class="text-sm font-medium text-zinc-700"
+              for="expense-amount"
+              >Valor</label
+            >
+            <InputText
+              id="expense-amount"
+              v-model="form.amount"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+            />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-zinc-700" for="expense-date">Data da despesa</label>
-            <InputText id="expense-date" v-model="form.expense_date" type="date" />
+            <label class="text-sm font-medium text-zinc-700" for="expense-date"
+              >Data da despesa</label
+            >
+            <InputText
+              id="expense-date"
+              v-model="form.expense_date"
+              type="date"
+            />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-zinc-700" for="expense-category">Categoria</label>
-            <Select id="expense-category" v-model="form.category" :options="categoryOptions" option-label="label" option-value="value" />
+            <label
+              class="text-sm font-medium text-zinc-700"
+              for="expense-category"
+              >Categoria</label
+            >
+            <Select
+              id="expense-category"
+              v-model="form.category"
+              :options="categoryOptions"
+              option-label="label"
+              option-value="value"
+            />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-zinc-700" for="expense-payment">Pagamento</label>
-            <Select id="expense-payment" v-model="form.payment_method" :options="paymentMethodOptions" option-label="label" option-value="value" />
+            <label
+              class="text-sm font-medium text-zinc-700"
+              for="expense-payment"
+              >Pagamento</label
+            >
+            <Select
+              id="expense-payment"
+              v-model="form.payment_method"
+              :options="paymentMethodOptions"
+              option-label="label"
+              option-value="value"
+            />
           </div>
 
           <div class="flex flex-col gap-2 md:col-span-2">
-            <label class="text-sm font-medium text-zinc-700" for="expense-session">Vincular ao caixa</label>
-            <Select id="expense-session" v-model="form.cash_register_session_id" :options="formSessionOptions" option-label="label" option-value="value" />
+            <label
+              class="text-sm font-medium text-zinc-700"
+              for="expense-session"
+              >Vincular ao caixa</label
+            >
+            <Select
+              id="expense-session"
+              v-model="form.cash_register_session_id"
+              :options="formSessionOptions"
+              option-label="label"
+              option-value="value"
+            />
           </div>
 
           <div class="flex flex-col gap-2 md:col-span-2">
-            <label class="text-sm font-medium text-zinc-700" for="expense-notes">Observacoes</label>
-            <Textarea id="expense-notes" v-model="form.notes" rows="4" auto-resize />
+            <label class="text-sm font-medium text-zinc-700" for="expense-notes"
+              >Observações</label
+            >
+            <Textarea
+              id="expense-notes"
+              v-model="form.notes"
+              rows="4"
+              auto-resize
+            />
           </div>
         </div>
 
         <div class="flex justify-end gap-2">
-          <Button label="Cancelar" severity="secondary" text @click="showFormDialog = false" />
-          <Button type="submit" :label="isSubmitting ? 'Salvando...' : editingExpenseId ? 'Salvar alteracoes' : 'Criar despesa'" :loading="isSubmitting" />
+          <Button
+            label="Cancelar"
+            severity="secondary"
+            text
+            @click="showFormDialog = false"
+          />
+          <Button
+            type="submit"
+            :label="
+              isSubmitting
+                ? 'Salvando...'
+                : editingExpenseId
+                  ? 'Salvar alteracoes'
+                  : 'Criar despesa'
+            "
+            :loading="isSubmitting"
+          />
         </div>
       </form>
     </Dialog>
 
-    <Dialog v-model:visible="showDeleteDialog" modal header="Excluir despesa" :style="{ width: '28rem', maxWidth: '92vw' }">
+    <Dialog
+      v-model:visible="showDeleteDialog"
+      modal
+      header="Excluir despesa"
+      :style="{ width: '28rem', maxWidth: '92vw' }"
+    >
       <div class="text-sm leading-6 text-zinc-700">
-        Excluir a despesa <strong>{{ expenseToDelete?.description }}</strong> no valor de {{ formatCurrency(expenseToDelete?.amount ?? '0.00') }}?
+        Excluir a despesa <strong>{{ expenseToDelete?.description }}</strong> no
+        valor de {{ formatCurrency(expenseToDelete?.amount ?? '0.00') }}?
       </div>
 
       <template #footer>
-        <Button label="Cancelar" severity="secondary" text @click="showDeleteDialog = false" />
-        <Button label="Excluir" severity="danger" :loading="isSubmitting" @click="removeExpense" />
+        <Button
+          label="Cancelar"
+          severity="secondary"
+          text
+          @click="showDeleteDialog = false"
+        />
+        <Button
+          label="Excluir"
+          severity="danger"
+          :loading="isSubmitting"
+          @click="removeExpense"
+        />
       </template>
     </Dialog>
 
-    <Dialog v-model:visible="showErrorDialog" modal header="Atenção" :style="{ width: '28rem', maxWidth: '92vw' }">
+    <Dialog
+      v-model:visible="showErrorDialog"
+      modal
+      header="Atenção"
+      :style="{ width: '28rem', maxWidth: '92vw' }"
+    >
       <div class="text-sm leading-6 text-zinc-700">{{ errorMessage }}</div>
 
       <template #footer>
-        <Button label="Fechar" severity="secondary" @click="showErrorDialog = false" />
+        <Button
+          label="Fechar"
+          severity="secondary"
+          @click="showErrorDialog = false"
+        />
       </template>
     </Dialog>
   </section>
@@ -187,8 +381,16 @@ import Textarea from 'primevue/textarea'
 import { useToast } from 'primevue/usetoast'
 
 import { useAppTopbar } from '@/composables/useAppTopbar'
-import { getCurrentCashRegister, listCashRegisterHistory } from '@/services/cashRegister'
-import { createExpense, deleteExpense, listExpenses, updateExpense } from '@/services/expenses'
+import {
+  getCurrentCashRegister,
+  listCashRegisterHistory
+} from '@/services/cashRegister'
+import {
+  createExpense,
+  deleteExpense,
+  listExpenses,
+  updateExpense
+} from '@/services/expenses'
 import { ApiError } from '@/services/http'
 import type { CashRegisterSession } from '@/types/cashRegister'
 import type { Expense, ExpenseCategory, ExpensePayload } from '@/types/expense'
@@ -242,12 +444,15 @@ const categoryOptions: Array<{ label: string; value: ExpenseCategory }> = [
 const paymentMethodOptions: Array<{ label: string; value: PaymentMethod }> = [
   { label: 'Dinheiro', value: 'CASH' },
   { label: 'Pix', value: 'PIX' },
-  { label: 'Debito', value: 'DEBIT_CARD' },
-  { label: 'Credito', value: 'CREDIT_CARD' },
+  { label: 'Débito', value: 'DEBIT_CARD' },
+  { label: 'Crédito', value: 'CREDIT_CARD' },
   { label: 'Misto', value: 'MIXED' }
 ]
 
-const categoryFilterOptions = computed(() => [{ label: 'Todas', value: '' }, ...categoryOptions])
+const categoryFilterOptions = computed(() => [
+  { label: 'Todas', value: '' },
+  ...categoryOptions
+])
 
 const sessionOptions = computed(() => {
   const seen = new Set<string>()
@@ -265,17 +470,25 @@ const sessionOptions = computed(() => {
 })
 
 const sessionFilterOptions = computed(() => [
-  { label: 'Todas as sessoes', value: '' },
-  ...sessionOptions.value.map((session) => ({ label: sessionLabel(session.id), value: session.id }))
+  { label: 'Todas as sessões', value: '' },
+  ...sessionOptions.value.map((session) => ({
+    label: sessionLabel(session.id),
+    value: session.id
+  }))
 ])
 
 const formSessionOptions = computed(() => [
   { label: 'Sem vinculo de caixa', value: '' },
-  ...sessionOptions.value.map((session) => ({ label: sessionLabel(session.id), value: session.id }))
+  ...sessionOptions.value.map((session) => ({
+    label: sessionLabel(session.id),
+    value: session.id
+  }))
 ])
 
 const totalExpenses = computed(() =>
-  expenses.value.reduce((sum, expense) => sum + Number(expense.amount), 0).toFixed(2)
+  expenses.value
+    .reduce((sum, expense) => sum + Number(expense.amount), 0)
+    .toFixed(2)
 )
 
 const cashExpenses = computed(() =>
@@ -323,20 +536,27 @@ function formatDate(value: string): string {
 }
 
 function paymentMethodLabel(value: PaymentMethod): string {
-  return paymentMethodOptions.find((option) => option.value === value)?.label ?? value
+  return (
+    paymentMethodOptions.find((option) => option.value === value)?.label ??
+    value
+  )
 }
 
 function categoryLabel(value: ExpenseCategory): string {
-  return categoryOptions.find((option) => option.value === value)?.label ?? value
+  return (
+    categoryOptions.find((option) => option.value === value)?.label ?? value
+  )
 }
 
 function sessionLabel(sessionId: string | null): string {
   if (!sessionId) {
-    return 'Sem sessao'
+    return 'Sem sessão'
   }
 
   const session = sessionOptions.value.find((item) => item.id === sessionId)
-  const base = session ? new Date(session.opened_at).toLocaleDateString('pt-BR') : sessionId.slice(0, 8).toUpperCase()
+  const base = session
+    ? new Date(session.opened_at).toLocaleDateString('pt-BR')
+    : sessionId.slice(0, 8).toUpperCase()
   return session?.status === 'OPEN' ? `${base} · Aberto` : base
 }
 
@@ -366,8 +586,11 @@ function buildFilters() {
   return {
     start_date: filters.value.start_date || undefined,
     end_date: filters.value.end_date || undefined,
-    category: (filters.value.category || undefined) as ExpenseCategory | undefined,
-    cash_register_session_id: filters.value.cash_register_session_id || undefined
+    category: (filters.value.category || undefined) as
+      | ExpenseCategory
+      | undefined,
+    cash_register_session_id:
+      filters.value.cash_register_session_id || undefined
   }
 }
 
@@ -447,7 +670,7 @@ async function loadExpenses(): Promise<void> {
   try {
     expenses.value = await listExpenses(buildFilters())
   } catch (error) {
-    displayError(readError(error, 'Nao foi possivel carregar as despesas.'))
+    displayError(readError(error, 'Não foi possível carregar as despesas.'))
   } finally {
     isLoading.value = false
   }
@@ -459,7 +682,9 @@ async function refreshPage(): Promise<void> {
   try {
     await Promise.all([loadSupportingData(), loadExpenses()])
   } catch (error) {
-    displayError(readError(error, 'Nao foi possivel carregar a tela de despesas.'))
+    displayError(
+      readError(error, 'Não foi possível carregar a tela de despesas.')
+    )
     isLoading.value = false
   }
 }
@@ -472,17 +697,25 @@ async function submitExpense(): Promise<void> {
 
     if (editingExpenseId.value) {
       await updateExpense(editingExpenseId.value, payload)
-      toast.add({ severity: 'success', summary: 'Despesa atualizada', life: 2200 })
+      toast.add({
+        severity: 'success',
+        summary: 'Despesa atualizada',
+        life: 2200
+      })
     } else {
       await createExpense(payload)
-      toast.add({ severity: 'success', summary: 'Despesa registrada', life: 2200 })
+      toast.add({
+        severity: 'success',
+        summary: 'Despesa registrada',
+        life: 2200
+      })
     }
 
     showFormDialog.value = false
     form.value = createEmptyForm()
     await refreshPage()
   } catch (error) {
-    displayError(readError(error, 'Nao foi possivel salvar a despesa.'))
+    displayError(readError(error, 'Não foi possível salvar a despesa.'))
   } finally {
     isSubmitting.value = false
   }
@@ -502,7 +735,7 @@ async function removeExpense(): Promise<void> {
     toast.add({ severity: 'success', summary: 'Despesa excluida', life: 2200 })
     await refreshPage()
   } catch (error) {
-    displayError(readError(error, 'Nao foi possivel excluir a despesa.'))
+    displayError(readError(error, 'Não foi possível excluir a despesa.'))
   } finally {
     isSubmitting.value = false
   }

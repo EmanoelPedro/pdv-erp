@@ -52,20 +52,16 @@ class PaymentBreakdown:
         if method != PaymentMethod.MIXED:
             for payment_method in amounts:
                 amounts[payment_method] = (
-                    normalized_total
-                    if payment_method == method
-                    else Decimal("0.00")
+                    normalized_total if payment_method == method else Decimal("0.00")
                 )
         else:
-            positive_methods = [
-                amount for amount in amounts.values() if amount > 0]
+            positive_methods = [amount for amount in amounts.values() if amount > 0]
             if len(positive_methods) < 2:
                 raise InvalidPaymentError(
                     "Mixed payments must include at least two payment amounts.",
                 )
 
-            total_breakdown = normalize_money(
-                sum(amounts.values(), start=Decimal("0.00")))
+            total_breakdown = normalize_money(sum(amounts.values(), start=Decimal("0.00")))
             if total_breakdown != normalized_total:
                 raise InvalidPaymentError(
                     "Mixed payment amounts must add up to the sale total.",
@@ -143,8 +139,7 @@ class Sale:
             sum((item.total_price for item in items), start=Decimal("0.00")),
         )
         if subtotal_amount != payment.total_amount:
-            raise InvalidPaymentError(
-                "Payment total must match the cart total.")
+            raise InvalidPaymentError("Payment total must match the cart total.")
 
         return cls(
             id=uuid4(),

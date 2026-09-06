@@ -56,7 +56,8 @@ if (!isTauriBuild) {
       manifest: {
         name: 'PDV Local',
         short_name: 'PDV',
-        description: 'Base local-first para operacao de caixa e controle do negocio.',
+        description:
+          'PDV local-first para operação de caixa e controle do negócio.',
         theme_color: '#9a3412',
         background_color: '#fff7ed',
         display: 'standalone',
@@ -82,7 +83,7 @@ export default defineConfig({
     }
   },
   server: {
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: 5173,
     strictPort: true
   }

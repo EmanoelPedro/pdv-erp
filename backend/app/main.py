@@ -36,8 +36,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     register_exception_handlers(app)
-    app.mount(
-        "/media", StaticFiles(directory=settings.resolved_media_dir), name="media")
+    app.mount("/media", StaticFiles(directory=settings.resolved_media_dir), name="media")
     app.include_router(api_router)
 
     if frontend_index_file.is_file():

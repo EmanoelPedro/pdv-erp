@@ -1,6 +1,5 @@
 from app.domain.cash_register import CashRegisterSession, CashRegisterStatus
 from app.domain.catalog import Category, Product
-from app.domain.expense import Expense, ExpenseCategory
 from app.domain.exceptions import (
     AppAuthenticationError,
     AppConflictError,
@@ -29,6 +28,7 @@ from app.domain.exceptions import (
     UserNotFoundError,
     UserRegistrationNotAllowedError,
 )
+from app.domain.expense import Expense, ExpenseCategory
 from app.domain.sale import PaymentBreakdown, PaymentMethod, Sale, SaleItem, SaleStatus
 from app.domain.sync_queue import SyncQueueEntry, SyncStatus
 from app.domain.user import User, UserRole, UserSession

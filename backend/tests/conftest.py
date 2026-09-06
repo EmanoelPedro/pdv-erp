@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from app.core.config import get_settings
 from app.database import get_db, models  # noqa: F401
 from app.database.base import Base
 from app.main import create_app
@@ -37,7 +38,13 @@ def db_session() -> Generator[Session, None, None]:
 
 
 @pytest.fixture
-def client(db_session: Session) -> Generator[TestClient, None, None]:
+def client(
+    db_session: Session,
+    tmp_path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> Generator[TestClient, None, None]:
+    monkeypatch.setenv("MEDIA_DIR", str(tmp_path / "media"))
+    get_settings.cache_clear()
     app = create_app()
 
     def override_get_db() -> Generator[Session, None, None]:
@@ -49,6 +56,7 @@ def client(db_session: Session) -> Generator[TestClient, None, None]:
         yield test_client
 
     app.dependency_overrides.clear()
+    get_settings.cache_clear()
 
 
 @pytest.fixture

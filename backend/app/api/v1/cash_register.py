@@ -80,11 +80,10 @@ def get_current_cash_register(
 def list_cash_register_history(
     _: Annotated[User, Depends(get_current_owner_user)],
     service: Annotated[CashRegisterService, Depends(get_cash_register_service)],
-    start_date: date | None = Query(default=None),
-    end_date: date | None = Query(default=None),
+    start_date: Annotated[date | None, Query()] = None,
+    end_date: Annotated[date | None, Query()] = None,
 ) -> list[CashRegisterSessionResponse]:
-    snapshots = service.list_session_snapshots(
-        start_date=start_date, end_date=end_date)
+    snapshots = service.list_session_snapshots(start_date=start_date, end_date=end_date)
     return [
         CashRegisterSessionResponse.from_domain(
             snapshot.session,

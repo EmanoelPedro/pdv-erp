@@ -17,17 +17,32 @@
         />
       </div>
 
-      <Message v-else severity="warn" :closable="false">Selecione uma imagem para continuar.</Message>
-      <Message v-if="errorMessage" severity="error" :closable="false">{{ errorMessage }}</Message>
+      <Message v-else severity="warn" :closable="false"
+        >Selecione uma imagem para continuar.</Message
+      >
+      <Message v-if="errorMessage" severity="error" :closable="false">{{
+        errorMessage
+      }}</Message>
 
       <div class="text-sm text-zinc-500">
-        Ajuste o enquadramento para um recorte quadrado. A imagem sera exportada em boa qualidade para manter o visual do produto consistente.
+        Ajuste o enquadramento para um recorte quadrado. A imagem será exportada
+        em boa qualidade para manter o visual do produto consistente.
       </div>
     </div>
 
     <template #footer>
-      <Button label="Cancelar" severity="secondary" text @click="emit('update:visible', false)" />
-      <Button label="Aplicar corte" :disabled="!source" :loading="isApplying" @click="applyCrop" />
+      <Button
+        label="Cancelar"
+        severity="secondary"
+        text
+        @click="emit('update:visible', false)"
+      />
+      <Button
+        label="Aplicar corte"
+        :disabled="!source"
+        :loading="isApplying"
+        @click="applyCrop"
+      />
     </template>
   </Dialog>
 </template>
@@ -70,7 +85,7 @@ async function canvasToFile(canvas: HTMLCanvasElement): Promise<File> {
   })
 
   if (!blob) {
-    throw new Error('Nao foi possivel gerar a imagem cortada.')
+    throw new Error('Não foi possível gerar a imagem cortada.')
   }
 
   return new File([blob], props.fileName ?? 'produto.webp', {
@@ -90,7 +105,7 @@ async function applyCrop(): Promise<void> {
   const canvas = result.canvas
 
   if (!canvas) {
-    errorMessage.value = 'Nao foi possivel ler o recorte atual.'
+    errorMessage.value = 'Não foi possível ler o recorte atual.'
     return
   }
 
@@ -104,7 +119,10 @@ async function applyCrop(): Promise<void> {
     })
     emit('update:visible', false)
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Nao foi possivel aplicar o corte.'
+    errorMessage.value =
+      error instanceof Error
+        ? error.message
+        : 'Não foi possível aplicar o corte.'
   } finally {
     isApplying.value = false
   }

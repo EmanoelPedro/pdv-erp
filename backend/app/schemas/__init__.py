@@ -5,12 +5,11 @@ from app.schemas.auth import (
     SetupStateResponse,
     UserResponse,
 )
-from app.schemas.dashboard import DashboardSummaryResponse
 from app.schemas.cash_register import (
+    CashRegisterHistoryFilters,
     CashRegisterSessionResponse,
     CashRegisterTotalsResponse,
     CloseCashRegisterRequest,
-    CashRegisterHistoryFilters,
     OpenCashRegisterRequest,
 )
 from app.schemas.catalog import (
@@ -19,6 +18,7 @@ from app.schemas.catalog import (
     CreateProductRequest,
     ProductResponse,
 )
+from app.schemas.dashboard import DashboardSummaryResponse
 from app.schemas.expense import CreateExpenseRequest, ExpenseResponse, UpdateExpenseRequest
 from app.schemas.reports import (
     CategoryPerformanceRowResponse,

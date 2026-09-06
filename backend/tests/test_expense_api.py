@@ -134,5 +134,7 @@ def test_closed_session_expense_is_immutable_via_api(
     )
 
     assert update_response.status_code == 409
-    assert update_response.json()[
-        "detail"] == "Expenses linked to a closed cash register session cannot be changed."
+    assert (
+        update_response.json()["detail"]
+        == "Expenses linked to a closed cash register session cannot be changed."
+    )

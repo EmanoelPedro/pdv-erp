@@ -2,6 +2,11 @@
   "name": "pdv-frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EmanoelPedro/pdv-erp.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,13 +24,13 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.11.0",
     "@primeuix/themes": "^2.0.3",
+    "@tauri-apps/api": "^2.11.0",
     "chart.js": "^4.5.1",
     "pinia": "^3.0.2",
     "primevue": "^4.5.5",
     "tailwindcss-primeui": "^0.6.1",
-    "vue": "^3.5.13",
+    "vue": "^3.5.42",
     "vue-advanced-cropper": "^2.8.9",
     "vue-router": "^4.5.1"
   },

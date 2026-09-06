@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import AppShell from '@/layouts/AppShell.vue'
-import CatalogPage from '@/pages/CatalogPage.vue'
-import CashRegisterPage from '@/pages/CashRegisterPage.vue'
-import DashboardPage from '@/pages/DashboardPage.vue'
-import ExpensesPage from '@/pages/ExpensesPage.vue'
-import LoginPage from '@/pages/LoginPage.vue'
-import ReportsPage from '@/pages/ReportsPage.vue'
-import SalesPage from '@/pages/SalesPage.vue'
-import UsersPage from '@/pages/UsersPage.vue'
 import { useAuthStore } from '@/stores/auth'
 import { pinia } from '@/stores/index'
+
+const CatalogPage = () => import('@/pages/CatalogPage.vue')
+const CashRegisterPage = () => import('@/pages/CashRegisterPage.vue')
+const DashboardPage = () => import('@/pages/DashboardPage.vue')
+const ExpensesPage = () => import('@/pages/ExpensesPage.vue')
+const LoginPage = () => import('@/pages/LoginPage.vue')
+const ReportsPage = () => import('@/pages/ReportsPage.vue')
+const UsersPage = () => import('@/pages/UsersPage.vue')
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -49,11 +49,6 @@ export const router = createRouter({
           name: 'users',
           component: UsersPage,
           meta: { ownerOnly: true }
-        },
-        {
-          path: 'vendas',
-          name: 'sales',
-          component: SalesPage
         },
         {
           path: 'despesas',

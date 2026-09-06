@@ -8,8 +8,7 @@ from pydantic import BaseModel, Field
 from app.domain.expense import Expense, ExpenseCategory
 from app.domain.sale import PaymentMethod
 
-PositiveMoneyInput = Annotated[Decimal, Field(
-    gt=0, max_digits=12, decimal_places=2)]
+PositiveMoneyInput = Annotated[Decimal, Field(gt=0, max_digits=12, decimal_places=2)]
 
 
 class ExpenseBaseRequest(BaseModel):

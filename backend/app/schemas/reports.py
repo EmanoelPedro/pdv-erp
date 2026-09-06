@@ -7,7 +7,6 @@ from pydantic import BaseModel, Field
 
 from app.domain.expense import ExpenseCategory
 from app.domain.sale import PaymentMethod
-from app.schemas.cash_register import CashRegisterSessionResponse
 from app.services.report_service import (
     CategoryPerformanceRow,
     ExpenseAnalysisRow,
@@ -47,7 +46,8 @@ class ProductPerformanceRowResponse(BaseModel):
     quantity_sold: int
     revenue: Decimal
     average_sale_participation: Decimal = Field(
-        description="Percent of filtered sales containing the product.")
+        description="Percent of filtered sales containing the product."
+    )
 
     @classmethod
     def from_service(cls, value: ProductPerformanceRow) -> "ProductPerformanceRowResponse":

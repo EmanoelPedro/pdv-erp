@@ -31,12 +31,10 @@ class ProductMediaService:
 
         payload = await upload.read()
         if not payload:
-            raise InvalidProductImageError(
-                "Selecione uma imagem valida para o produto.")
+            raise InvalidProductImageError("Selecione uma imagem valida para o produto.")
 
         if len(payload) > self.max_size_bytes:
-            raise InvalidProductImageError(
-                "A imagem do produto excede o limite de 5 MB.")
+            raise InvalidProductImageError("A imagem do produto excede o limite de 5 MB.")
 
         self.product_dir.mkdir(parents=True, exist_ok=True)
         file_name = f"{uuid4()}{extension}"

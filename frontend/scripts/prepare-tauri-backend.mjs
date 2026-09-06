@@ -5,7 +5,12 @@ import { fileURLToPath } from 'node:url'
 const scriptDir = dirname(fileURLToPath(import.meta.url))
 const frontendDir = resolve(scriptDir, '..')
 const backendDir = resolve(frontendDir, '..', 'backend')
-const bundledBackendDir = resolve(frontendDir, 'src-tauri', 'resources', 'backend')
+const bundledBackendDir = resolve(
+  frontendDir,
+  'src-tauri',
+  'resources',
+  'backend'
+)
 
 rmSync(bundledBackendDir, { recursive: true, force: true })
 mkdirSync(bundledBackendDir, { recursive: true })

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from uuid import UUID
 
+from app.domain.cash_register import CashRegisterSession
 from app.domain.exceptions import (
     CashRegisterNotOpenError,
     ProductInactiveError,
@@ -49,11 +50,9 @@ class SaleService:
     ) -> CreateSaleResult:
         open_session = self.cash_register_repository.get_open_session()
         if open_session is None:
-            raise CashRegisterNotOpenError(
-                "An open cash register is required to make a sale.")
+            raise CashRegisterNotOpenError("An open cash register is required to make a sale.")
 
-        products = self.product_repository.get_by_ids(
-            [item.product_id for item in items])
+        products = self.product_repository.get_by_ids([item.product_id for item in items])
         product_map = {product.id: product for product in products}
 
         if len(product_map) != len(items):
@@ -66,8 +65,7 @@ class SaleService:
                 raise ProductInactiveError("Inactive products cannot be sold.")
             sale_items.append(SaleItem.from_product(product, item.quantity))
 
-        total_amount = sum(
-            (item.total_price for item in sale_items), start=Decimal("0.00"))
+        total_amount = sum((item.total_price for item in sale_items), start=Decimal("0.00"))
         payment = PaymentBreakdown.create(
             method=payment_method,
             total_amount=total_amount,

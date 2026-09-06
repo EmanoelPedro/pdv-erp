@@ -33,8 +33,7 @@ def register_user(
     if service.has_users() and current_user is None:
         raise AuthenticationRequiredError("Authentication is required.")
     if current_user is not None and current_user.role.value != "OWNER":
-        raise OwnerPermissionRequiredError(
-            "Owner approval is required for this action.")
+        raise OwnerPermissionRequiredError("Owner approval is required for this action.")
 
     user = service.register_user(
         full_name=payload.full_name,

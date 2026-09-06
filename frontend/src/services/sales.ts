@@ -7,6 +7,11 @@ interface CreateSaleResponse {
   cash_register_session: CashRegisterSession
 }
 
-export async function createSale(payload: CreateSalePayload): Promise<CreateSaleResponse> {
-  return apiPost<CreateSaleResponse, CreateSalePayload>('/api/v1/sales', payload)
+export async function createSale(
+  payload: CreateSalePayload
+): Promise<CreateSaleResponse> {
+  return apiPost<CreateSaleResponse, CreateSalePayload>(
+    '/api/v1/sales',
+    payload
+  )
 }

@@ -3,8 +3,8 @@ from decimal import Decimal
 
 from sqlalchemy.orm import Session
 
-from app.domain.catalog import Category, Product
 from app.domain.cash_register import CashRegisterSession
+from app.domain.catalog import Category, Product
 from app.domain.expense import Expense, ExpenseCategory
 from app.domain.sale import PaymentBreakdown, PaymentMethod, Sale, SaleItem
 from app.domain.shared import utc_now
@@ -44,7 +44,8 @@ def _create_product(
     price: str,
 ) -> Product:
     category = CategoryRepository(db_session).create(
-        Category.create(name=category_name, created_at=_at(-1, 7)))
+        Category.create(name=category_name, created_at=_at(-1, 7))
+    )
     return ProductRepository(db_session).create(
         Product.create(
             category_id=category.id,
@@ -64,8 +65,9 @@ def _create_session(
     closed_at: datetime | None = None,
 ) -> CashRegisterSession:
     repository = CashRegisterSessionRepository(db_session)
-    session = repository.create(CashRegisterSession.open(
-        Decimal(opening_amount), opened_at=opened_at))
+    session = repository.create(
+        CashRegisterSession.open(Decimal(opening_amount), opened_at=opened_at)
+    )
     if closing_amount is None:
         return session
     return repository.update(session.close(Decimal(closing_amount), closed_at=closed_at))
@@ -81,8 +83,7 @@ def _create_sale(
     payment_method: PaymentMethod,
     created_at: datetime,
 ) -> None:
-    item = SaleItem.from_product(
-        product, quantity=quantity, created_at=created_at)
+    item = SaleItem.from_product(product, quantity=quantity, created_at=created_at)
     payment = PaymentBreakdown.create(payment_method, item.total_price)
     sale = Sale.create(
         cash_register_session_id=session_id,
@@ -185,8 +186,7 @@ def test_dashboard_summary_calculates_today_metrics(db_session: Session) -> None
     )
     db_session.commit()
 
-    summary = DashboardService(
-        ReportRepository(db_session)).get_today_summary()
+    summary = DashboardService(ReportRepository(db_session)).get_today_summary()
 
     assert summary.revenue_today == Decimal("44.00")
     assert summary.expenses_today == Decimal("15.00")
@@ -200,10 +200,12 @@ def test_dashboard_summary_calculates_today_metrics(db_session: Session) -> None
     assert summary.best_category_today is not None
     assert summary.best_category_today.category_name == "Salgados"
     assert len(summary.sales_by_hour_today) == 24
-    assert next(point for point in summary.sales_by_hour_today if point.hour ==
-                "09:00").revenue == Decimal("36.00")
-    assert next(point for point in summary.sales_by_hour_today if point.hour ==
-                "10:00").revenue == Decimal("8.00")
+    assert next(
+        point for point in summary.sales_by_hour_today if point.hour == "09:00"
+    ).revenue == Decimal("36.00")
+    assert next(
+        point for point in summary.sales_by_hour_today if point.hour == "10:00"
+    ).revenue == Decimal("8.00")
     assert len(summary.revenue_last_7_days) == 7
     assert summary.revenue_last_7_days[-1].revenue == Decimal("44.00")
     assert summary.revenue_last_7_days[-2].revenue == Decimal("16.00")
@@ -290,8 +292,7 @@ def test_report_service_applies_filters_and_percentages(db_session: Session) -> 
         sale_repository=SaleRepository(db_session),
         expense_repository=ExpenseRepository(db_session),
     )
-    service = ReportService(ReportRepository(
-        db_session), cash_register_service)
+    service = ReportService(ReportRepository(db_session), cash_register_service)
 
     category_filter = ReportFilters(
         start_date=utc_now().date(),
@@ -300,21 +301,27 @@ def test_report_service_applies_filters_and_percentages(db_session: Session) -> 
         user_id=owner.id,
     )
     product_rows = service.list_product_performance(category_filter)
-    sales_rows = service.list_sales_summary(ReportFilters(
-        start_date=utc_now().date(),
-        end_date=utc_now().date(),
-        user_id=owner.id,
-    ))
-    payment_rows = service.list_payment_methods(ReportFilters(
-        start_date=utc_now().date(),
-        end_date=utc_now().date(),
-        user_id=owner.id,
-    ))
-    expense_rows = service.list_expense_analysis(ReportFilters(
-        start_date=utc_now().date(),
-        end_date=utc_now().date(),
-        user_id=employee.id,
-    ))
+    sales_rows = service.list_sales_summary(
+        ReportFilters(
+            start_date=utc_now().date(),
+            end_date=utc_now().date(),
+            user_id=owner.id,
+        )
+    )
+    payment_rows = service.list_payment_methods(
+        ReportFilters(
+            start_date=utc_now().date(),
+            end_date=utc_now().date(),
+            user_id=owner.id,
+        )
+    )
+    expense_rows = service.list_expense_analysis(
+        ReportFilters(
+            start_date=utc_now().date(),
+            end_date=utc_now().date(),
+            user_id=employee.id,
+        )
+    )
 
     assert len(product_rows) == 1
     assert product_rows[0].product_name == "Pastel"

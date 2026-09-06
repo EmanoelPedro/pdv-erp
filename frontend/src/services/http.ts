@@ -41,7 +41,11 @@ async function parseError(response: Response): Promise<ApiError> {
   return new ApiError(response.status, detail)
 }
 
-async function request<T>(method: HttpMethod, path: string, body?: JsonBody): Promise<T> {
+async function request<T>(
+  method: HttpMethod,
+  path: string,
+  body?: JsonBody
+): Promise<T> {
   const { apiBaseUrl } = await initializeRuntimeConfig()
   const isFormData = body instanceof FormData
 
@@ -94,7 +98,9 @@ export async function apiPostFormData<TResponse>(
   return request<TResponse>('POST', path, payload)
 }
 
-export async function apiPostWithoutBody<TResponse>(path: string): Promise<TResponse> {
+export async function apiPostWithoutBody<TResponse>(
+  path: string
+): Promise<TResponse> {
   return request<TResponse>('POST', path)
 }
 
@@ -112,4 +118,3 @@ export async function apiDelete<TResponse>(path: string): Promise<TResponse> {
 export function getApiBaseUrl(): string {
   return getRuntimeConfig().apiBaseUrl
 }
-

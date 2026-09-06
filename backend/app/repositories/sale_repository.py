@@ -39,10 +39,7 @@ class SaleRepository:
         self.db.flush()
         self.db.refresh(sale_model)
 
-        item_models = [
-            SaleItemModel.from_domain(item, sale.id)
-            for item in sale.items
-        ]
+        item_models = [SaleItemModel.from_domain(item, sale.id) for item in sale.items]
         self.db.add_all(item_models)
         self.db.flush()
 
@@ -63,8 +60,10 @@ class SaleRepository:
             func.coalesce(
                 func.sum(
                     case(
-                        (SaleModel.payment_method ==
-                         PaymentMethod.CASH.value, SaleModel.total_amount),
+                        (
+                            SaleModel.payment_method == PaymentMethod.CASH.value,
+                            SaleModel.total_amount,
+                        ),
                         else_=0,
                     ),
                 ),
@@ -73,8 +72,10 @@ class SaleRepository:
             func.coalesce(
                 func.sum(
                     case(
-                        (SaleModel.payment_method ==
-                         PaymentMethod.PIX.value, SaleModel.total_amount),
+                        (
+                            SaleModel.payment_method == PaymentMethod.PIX.value,
+                            SaleModel.total_amount,
+                        ),
                         else_=0,
                     ),
                 ),
@@ -83,8 +84,10 @@ class SaleRepository:
             func.coalesce(
                 func.sum(
                     case(
-                        (SaleModel.payment_method ==
-                         PaymentMethod.DEBIT_CARD.value, SaleModel.total_amount),
+                        (
+                            SaleModel.payment_method == PaymentMethod.DEBIT_CARD.value,
+                            SaleModel.total_amount,
+                        ),
                         else_=0,
                     ),
                 ),
@@ -93,8 +96,10 @@ class SaleRepository:
             func.coalesce(
                 func.sum(
                     case(
-                        (SaleModel.payment_method ==
-                         PaymentMethod.CREDIT_CARD.value, SaleModel.total_amount),
+                        (
+                            SaleModel.payment_method == PaymentMethod.CREDIT_CARD.value,
+                            SaleModel.total_amount,
+                        ),
                         else_=0,
                     ),
                 ),
@@ -103,8 +108,10 @@ class SaleRepository:
             func.coalesce(
                 func.sum(
                     case(
-                        (SaleModel.payment_method ==
-                         PaymentMethod.MIXED.value, SaleModel.total_amount),
+                        (
+                            SaleModel.payment_method == PaymentMethod.MIXED.value,
+                            SaleModel.total_amount,
+                        ),
                         else_=0,
                     ),
                 ),
@@ -133,9 +140,7 @@ class SaleRepository:
         sales_amount = normalize_money(Decimal(str(sales_amount_raw or 0)))
         sales_count = int(sales_count_raw or 0)
         average_ticket_amount = (
-            normalize_money(sales_amount / sales_count)
-            if sales_count > 0
-            else Decimal("0.00")
+            normalize_money(sales_amount / sales_count) if sales_count > 0 else Decimal("0.00")
         )
 
         return SaleSessionMetrics(
@@ -143,23 +148,20 @@ class SaleRepository:
             sales_count=sales_count,
             average_ticket_amount=average_ticket_amount,
             total_received_amount=sales_amount,
-            cash_sales_amount=normalize_money(
-                Decimal(str(cash_sales_amount_raw or 0))),
-            pix_sales_amount=normalize_money(
-                Decimal(str(pix_sales_amount_raw or 0))),
-            debit_card_sales_amount=normalize_money(
-                Decimal(str(debit_card_sales_amount_raw or 0))),
+            cash_sales_amount=normalize_money(Decimal(str(cash_sales_amount_raw or 0))),
+            pix_sales_amount=normalize_money(Decimal(str(pix_sales_amount_raw or 0))),
+            debit_card_sales_amount=normalize_money(Decimal(str(debit_card_sales_amount_raw or 0))),
             credit_card_sales_amount=normalize_money(
-                Decimal(str(credit_card_sales_amount_raw or 0))),
-            mixed_sales_amount=normalize_money(
-                Decimal(str(mixed_sales_amount_raw or 0))),
-            cash_received_amount=normalize_money(
-                Decimal(str(cash_received_amount_raw or 0))),
-            pix_received_amount=normalize_money(
-                Decimal(str(pix_received_amount_raw or 0))),
+                Decimal(str(credit_card_sales_amount_raw or 0))
+            ),
+            mixed_sales_amount=normalize_money(Decimal(str(mixed_sales_amount_raw or 0))),
+            cash_received_amount=normalize_money(Decimal(str(cash_received_amount_raw or 0))),
+            pix_received_amount=normalize_money(Decimal(str(pix_received_amount_raw or 0))),
             debit_card_received_amount=normalize_money(
-                Decimal(str(debit_card_received_amount_raw or 0))),
+                Decimal(str(debit_card_received_amount_raw or 0))
+            ),
             credit_card_received_amount=normalize_money(
-                Decimal(str(credit_card_received_amount_raw or 0))),
+                Decimal(str(credit_card_received_amount_raw or 0))
+            ),
             last_sale_at=last_sale_at,
         )

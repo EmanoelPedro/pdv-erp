@@ -39,5 +39,7 @@ export async function bootstrapRuntime(): Promise<void> {
     await wait(DESKTOP_HEALTH_INTERVAL_MS)
   }
 
-  throw new Error('O backend local nao respondeu a tempo. Reinicie o aplicativo.')
+  throw new Error(
+    'O backend local não respondeu a tempo. Reinicie o aplicativo.'
+  )
 }

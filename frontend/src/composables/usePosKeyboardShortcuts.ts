@@ -8,9 +8,6 @@ interface PosKeyboardHandlers {
   onFocusSearch: () => void
   onClearCart: () => void
   onCancelItem: () => void
-  onDiscount: () => void
-  onObservation: () => void
-  onCustomer: () => void
   onConfirmSale: () => void
   onCloseCashRegister: () => void
   onSelectProductShortcut: (shortcut: string) => void
@@ -32,7 +29,10 @@ export function usePosKeyboardShortcuts(handlers: PosKeyboardHandlers): void {
   function handleKeydown(event: KeyboardEvent): void {
     const editableTarget = isEditableTarget(event.target)
 
-    if ((event.key === 'k' && (event.ctrlKey || event.metaKey)) || (!editableTarget && event.key === '/')) {
+    if (
+      (event.key === 'k' && (event.ctrlKey || event.metaKey)) ||
+      (!editableTarget && event.key === '/')
+    ) {
       event.preventDefault()
       handlers.onFocusSearch()
       return
@@ -55,18 +55,6 @@ export function usePosKeyboardShortcuts(handlers: PosKeyboardHandlers): void {
         event.preventDefault()
         handlers.onCancelItem()
         return
-      case 'F7':
-        event.preventDefault()
-        handlers.onDiscount()
-        return
-      case 'F8':
-        event.preventDefault()
-        handlers.onObservation()
-        return
-      case 'F9':
-        event.preventDefault()
-        handlers.onCustomer()
-        return
       case 'F10':
         event.preventDefault()
         handlers.onConfirmSale()
@@ -87,7 +75,11 @@ export function usePosKeyboardShortcuts(handlers: PosKeyboardHandlers): void {
       return
     }
 
-    if (PRODUCT_SHORTCUT_KEYS.includes(event.key as (typeof PRODUCT_SHORTCUT_KEYS)[number])) {
+    if (
+      PRODUCT_SHORTCUT_KEYS.includes(
+        event.key as (typeof PRODUCT_SHORTCUT_KEYS)[number]
+      )
+    ) {
       event.preventDefault()
       handlers.onSelectProductShortcut(event.key)
     }

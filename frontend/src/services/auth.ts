@@ -15,8 +15,13 @@ export async function login(payload: LoginPayload): Promise<LoginResponse> {
   return apiPost<LoginResponse, LoginPayload>('/api/v1/auth/login', payload)
 }
 
-export async function registerUser(payload: RegisterUserPayload): Promise<AuthUser> {
-  return apiPost<AuthUser, RegisterUserPayload>('/api/v1/auth/register', payload)
+export async function registerUser(
+  payload: RegisterUserPayload
+): Promise<AuthUser> {
+  return apiPost<AuthUser, RegisterUserPayload>(
+    '/api/v1/auth/register',
+    payload
+  )
 }
 
 export async function getCurrentUser(): Promise<AuthUser> {

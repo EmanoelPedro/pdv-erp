@@ -78,16 +78,14 @@ class CashRegisterService:
     def get_current_session_snapshot(self) -> CashRegisterSessionSnapshot:
         session = self.repository.get_open_session()
         if session is None:
-            raise CashRegisterNotFoundError(
-                "No open cash register session was found.")
+            raise CashRegisterNotFoundError("No open cash register session was found.")
 
         return self._build_snapshot(session)
 
     def get_session_snapshot(self, session_id: UUID) -> CashRegisterSessionSnapshot:
         session = self.repository.get_by_id(session_id)
         if session is None:
-            raise CashRegisterNotFoundError(
-                "Cash register session was not found.")
+            raise CashRegisterNotFoundError("Cash register session was not found.")
 
         return self._build_snapshot(session)
 
@@ -97,8 +95,7 @@ class CashRegisterService:
         start_date: date | None = None,
         end_date: date | None = None,
     ) -> list[CashRegisterSessionSnapshot]:
-        sessions = self.repository.list_all(
-            start_date=start_date, end_date=end_date)
+        sessions = self.repository.list_all(start_date=start_date, end_date=end_date)
         return [self._build_snapshot(session) for session in sessions]
 
     def close_session(
@@ -112,8 +109,7 @@ class CashRegisterService:
         self._require_valid_owner_pin(actor, owner_pin)
 
         session_snapshot = self.get_session_snapshot(session_id)
-        closed_session = session_snapshot.session.close(
-            closing_amount=closing_amount)
+        closed_session = session_snapshot.session.close(closing_amount=closing_amount)
         try:
             updated_session = self.repository.update(closed_session)
             self.repository.db.commit()
@@ -137,8 +133,7 @@ class CashRegisterService:
 
     def _build_snapshot(self, session: CashRegisterSession) -> CashRegisterSessionSnapshot:
         sale_metrics = self.sale_repository.get_session_metrics(session.id)
-        expense_metrics = self.expense_repository.get_session_metrics(
-            session.id)
+        expense_metrics = self.expense_repository.get_session_metrics(session.id)
         expected_amount = normalize_money(
             session.opening_amount
             + sale_metrics.cash_received_amount
@@ -146,16 +141,14 @@ class CashRegisterService:
         )
         difference_amount = session.difference_amount
         if session.closing_amount is not None:
-            difference_amount = normalize_money(
-                session.closing_amount - expected_amount)
+            difference_amount = normalize_money(session.closing_amount - expected_amount)
 
         hydrated_session = replace(
             session,
             expected_amount=expected_amount,
             difference_amount=difference_amount,
         )
-        metrics = self._compose_metrics(
-            sale_metrics, expense_metrics, expected_amount)
+        metrics = self._compose_metrics(sale_metrics, expense_metrics, expected_amount)
         return CashRegisterSessionSnapshot(session=hydrated_session, metrics=metrics)
 
     def _compose_metrics(

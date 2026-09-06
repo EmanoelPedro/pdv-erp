@@ -11,11 +11,19 @@ export async function listCategories(): Promise<Category[]> {
   return apiGet<Category[]>('/api/v1/catalog/categories')
 }
 
-export async function createCategory(payload: CreateCategoryPayload): Promise<Category> {
-  return apiPost<Category, CreateCategoryPayload>('/api/v1/catalog/categories', payload)
+export async function createCategory(
+  payload: CreateCategoryPayload
+): Promise<Category> {
+  return apiPost<Category, CreateCategoryPayload>(
+    '/api/v1/catalog/categories',
+    payload
+  )
 }
 
-export async function listProducts(search?: string, includeInactive = false): Promise<Product[]> {
+export async function listProducts(
+  search?: string,
+  includeInactive = false
+): Promise<Product[]> {
   const query = new URLSearchParams()
   if (search) {
     query.set('search', search)
@@ -27,24 +35,47 @@ export async function listProducts(search?: string, includeInactive = false): Pr
   return apiGet<Product[]>(`/api/v1/catalog/products${suffix}`)
 }
 
-export async function createProduct(payload: CreateProductPayload): Promise<Product> {
-  return apiPost<Product, CreateProductPayload>('/api/v1/catalog/products', payload)
+export async function createProduct(
+  payload: CreateProductPayload
+): Promise<Product> {
+  return apiPost<Product, CreateProductPayload>(
+    '/api/v1/catalog/products',
+    payload
+  )
 }
 
-export async function uploadProductImage(productId: string, file: File): Promise<Product> {
+export async function uploadProductImage(
+  productId: string,
+  file: File
+): Promise<Product> {
   const payload = new FormData()
   payload.set('image', file)
-  return apiPostFormData<Product>(`/api/v1/catalog/products/${productId}/image`, payload)
+  return apiPostFormData<Product>(
+    `/api/v1/catalog/products/${productId}/image`,
+    payload
+  )
 }
 
-export async function updateProduct(productId: string, payload: UpdateProductPayload): Promise<Product> {
-  return apiPut<Product, UpdateProductPayload>(`/api/v1/catalog/products/${productId}`, payload)
+export async function updateProduct(
+  productId: string,
+  payload: UpdateProductPayload
+): Promise<Product> {
+  return apiPut<Product, UpdateProductPayload>(
+    `/api/v1/catalog/products/${productId}`,
+    payload
+  )
 }
 
 export async function deactivateProduct(productId: string): Promise<Product> {
-  return apiPost<Product, Record<string, never>>(`/api/v1/catalog/products/${productId}/deactivate`, {})
+  return apiPost<Product, Record<string, never>>(
+    `/api/v1/catalog/products/${productId}/deactivate`,
+    {}
+  )
 }
 
 export async function restoreProduct(productId: string): Promise<Product> {
-  return apiPost<Product, Record<string, never>>(`/api/v1/catalog/products/${productId}/restore`, {})
+  return apiPost<Product, Record<string, never>>(
+    `/api/v1/catalog/products/${productId}/restore`,
+    {}
+  )
 }
